@@ -122,11 +122,12 @@
 							</template>
 							   <el-select v-model="my_form_model[item.name]" :placeholder="item.placeholder" :multiple='false'>
 							     <el-option
-							       v-for="opt in item.options"
+							       v-for="(opt, opt_index) in item.options"
 							       :key="opt"
-							       :label="opt"
 							       :value="opt"
-							     />
+							     >
+									<div v-html="item.options_label[opt_index]"></div>
+								 </el-option>
 							   </el-select>
 						</el-form-item>
 						
@@ -144,11 +145,12 @@
 							</template>
 							   <el-select v-model="my_form_model[item.name]" :placeholder="item.placeholder" :multiple='true'>
 							     <el-option
-							       v-for="opt in item.options"
+							       v-for="(opt, opt_index) in item.options"
 							       :key="opt"
-							       :label="opt"
 							       :value="opt"
-							     />
+							     >
+									<div v-html="item.options_label[opt_index]"></div>
+								 </el-option>
 							   </el-select>
 						</el-form-item>
 						

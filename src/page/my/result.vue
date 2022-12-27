@@ -16,6 +16,7 @@
 			</el-tag>
 			
 		</el-descriptions-item>
+		<el-descriptions-item label="用户" >{{result.username}}</el-descriptions-item>
 	    <el-descriptions-item label="时间" >
 			{{result.date_created}}  <el-tag class="ml-2" type="warning">created</el-tag><br>
 			{{result.date_run}}  <el-tag class="ml-2" type="warning">run</el-tag><br>
