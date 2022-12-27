@@ -266,6 +266,12 @@
 							          <el-radio :label="opt" v-for="opt in item.options"> {{opt}} </el-radio>
 							        </el-radio-group>
 						</el-form-item>
+						
+						<!-- 分割线 -->
+						<el-divider :border-style="item.border_style" :content-position='item.content_position' v-if="item.type === 'divider'"> 
+						<div v-html="item.desc"></div>
+						</el-divider>
+ 
 
 					</el-col>
 				</el-row>
@@ -336,7 +342,7 @@
 			// 软件
 			const software_name = ref('')
 			const software_details = reactive({})
-			const software_helps = computed(() => software_details.ui.filter((item) => item['type'] !== 'placeholder') )
+			const software_helps = computed(() => software_details.ui.filter((item) => item['type'] !== 'placeholder' && item['type'] !== 'divider') )
 			// 表单对象
 			const my_form = ref('')
 			// 表单参数
@@ -350,7 +356,7 @@
 						Object.assign(software_details, res.data.data)
 						// 添加表单参数
 						software_details.ui.forEach((item, index)=>{
-							if(item['type'] !== 'placeholder'){
+							if(item['type'] !== 'placeholder' && item['type'] !== 'divider'){
 								if('default' in item){
 									my_form_model[item.name] = item.default
 								}else{

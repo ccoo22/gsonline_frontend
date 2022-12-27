@@ -5,7 +5,7 @@ export function form_value_and_rules_initialization(ui){
 	const my_form_model = reactive({})
 	const my_form_rules = reactive({}) 
 	ui.forEach((item, index)=>{
-			if(item['type'] !== 'placeholder'){
+			if(item['type'] !== 'placeholder' && item['type'] !== 'divider'){
 				if('default' in item){
 					my_form_model[item.name] = item.default
 				}else{
