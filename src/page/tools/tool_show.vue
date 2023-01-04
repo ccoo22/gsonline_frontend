@@ -1,7 +1,7 @@
 <template>
-	<el-row class="software-show" align='top'  v-if="'ui' in software_details" >
+	<el-row class="software-show" align='top' ref="row_ref"   v-if="'ui' in software_details" >
 		
-		<el-col class="form-window" :span="14" >
+		<el-col class="form-window" :span="14"   >
 			<div class='title'> 
 				<span >{{software_details.name}}</span>
 			</div>
@@ -306,20 +306,28 @@
 		</el-col>
 		
 		<!-- 用法 -->
-		<el-col class="form-usage" :span="9">
-			<div class='title'><span >
-				示例图
-			</span></div>
-			<div class="demo-image">
-			    <el-image :src="software_details.demo_img"  :preview-src-list='[software_details.demo_img]' :hide-on-click-modal='true' fit='contain' />
-			</div>
-			<hr>
-
-			<el-descriptions title="参数说明" border :column='1' size='small'>
-				<el-descriptions-item :label="item.label" v-for="(item, index) in software_helps" :key='index' :width='15'> <div v-html="item.desc"></div> </el-descriptions-item>
-				 
-			</el-descriptions>
+		<el-col class="form-usage" :span="9" >
 			 
+				<div class='title'><span >
+					示例图
+				</span></div>
+				<div class="demo-image">
+					<el-image :src="software_details.demo_img"  :preview-src-list='[software_details.demo_img]' :hide-on-click-modal='true' fit='contain' />
+				</div>
+				<hr>
+	
+				<el-descriptions title="&nbsp;参数说明" border :column='1' size='small'>
+					<el-descriptions-item :label="item.label" v-for="(item, index) in software_helps" :key='index' :width='15'> <div v-html="item.desc"></div> </el-descriptions-item>
+				</el-descriptions>
+				
+				<hr>
+				<el-descriptions title="&nbsp;其他" border :column='1' size='small'>
+					<el-descriptions-item label="版本">{{software_details.version}}</el-descriptions-item>
+					<el-descriptions-item label="标签">{{software_details.tag.join()}}</el-descriptions-item>
+					<el-descriptions-item label="最近更新">{{software_details.date_last_modified}}</el-descriptions-item>
+					<el-descriptions-item label="引用">{{software_details.citation}}</el-descriptions-item>
+ 				</el-descriptions>
+
 		</el-col>
 	</el-row>
 		
@@ -331,7 +339,7 @@
 	} from 'vue-router'
 	import {watch, ref, h, onMounted, getCurrentInstance, reactive, computed} from 'vue'
  
- import { ElLoading , ElMessageBox, ElMessage, ElButton, ElSwitch } from 'element-plus'
+ import { ElMessageBox, ElMessage } from 'element-plus'
  import {form_pack, set_btn_status} from '../../api/gsonline.js'
 	export default {
 		setup() {
@@ -460,6 +468,7 @@
 				
 			}
 			
+			
 			return {my_form, my_form_model, my_form_rules, software_details, software_helps, btn_status, btn_start_run, upLoadProgress}
 		}
 	}
@@ -467,7 +476,8 @@
 
 <style lang="less">
 	.software-show{
-		 flex-wrap: wrap;
+		 // flex-wrap: wrap;
+		 position: relative;
 		.form-window{
 			height: 100%;
 			z-index: 100;
@@ -502,6 +512,9 @@
 			
 		}
 		.form-usage{
+			// position: fixed;
+			// right: 1.5%;
+			// width: 33%;
 			background-color: white;
 			margin: 8px 8px;
 			padding: 12px 0;

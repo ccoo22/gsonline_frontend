@@ -7,21 +7,15 @@
 		</template>
 	    <el-descriptions-item label="任务id" >{{result.mission_id}}</el-descriptions-item>
 	    <el-descriptions-item label="任务名" >{{result.mission_name}}</el-descriptions-item>
-	    <el-descriptions-item label="软件" >{{result.software}}</el-descriptions-item>
+	    <el-descriptions-item label="软件" >  <router-link :to="'/all/' + result.software"> <el-tag  round >{{result.software}}</el-tag> </router-link></el-descriptions-item>
 	    <el-descriptions-item label="运行状态" >
-			<el-tag
-			   :type="status_tag(result.status)"  
-			  disable-transitions
-			  >{{ result.status}}
-			</el-tag>
-			
+			  <el-steps :active="result_status.active" finish-status='success'>
+			    <el-step title="接收"  :description="result.date_created" />
+			    <el-step title="运行"  :description="result.date_run" />
+			    <el-step :title="result_status.final_title" :description="result.date_finished" :status='result_status.final_status' />
+			  </el-steps>
 		</el-descriptions-item>
 		<el-descriptions-item label="用户" >{{result.username}}</el-descriptions-item>
-	    <el-descriptions-item label="时间" >
-			{{result.date_created}}  <el-tag class="ml-2" type="warning">created</el-tag><br>
-			{{result.date_run}}  <el-tag class="ml-2" type="warning">run</el-tag><br>
-			{{result.date_finished}} <el-tag class="ml-2" type="warning">finished</el-tag><br>
-		</el-descriptions-item>
 	</el-descriptions>
 	
 	<div class='el-descriptions__title my-title'>分析结果</div>
@@ -29,10 +23,10 @@
 </template>
 
 <script>
-	import {watch, ref, onMounted, getCurrentInstance, reactive} from 'vue'
+	import {watch, ref, onMounted, computed, getCurrentInstance, reactive} from 'vue'
 	import {useRoute, useRouter} from 'vue-router'
 	import { ElLoading , ElMessageBox, ElMessage } from 'element-plus'
-	import {status_tag} from '@/api/gsonline.js'
+
 	// 自定义结果展示组件
 	import ShowResult from '@/components/ShowResult.vue'  
 	export default{
@@ -82,7 +76,34 @@
 				
 			}
 			
-			return {mission_id, result, status_tag, router}
+			// 运行steps 优化
+			const result_status = computed(()=>{
+				const status = {active: 0, final_status: '', final_title: '完成'}
+				if('status' in result){
+					switch(result.status){
+						case 'queue':
+							status.active = 1
+							break
+						case 'running':
+							status.active = 2
+							break
+						case 'error':
+							status.active = 3
+							status.final_title = "错误"
+							status.final_status = 'error'
+							break
+						case 'complete':
+							status.active = 3
+							break
+						default:
+							return ''
+					}
+				}
+				
+				return status
+			})
+			
+			return {mission_id, result, result_status, router}
 		}
 	}
 </script>

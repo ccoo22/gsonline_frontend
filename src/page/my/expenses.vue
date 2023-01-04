@@ -1,10 +1,10 @@
 <template>
-	<el-container>
-	      <el-header height='20px' >
-			  我的消费列表
+	<el-container style=" height: 100%;">
+	      <el-header height='30px' >
+			  我的消费记录
 			</el-header>
 	      <el-main>
-			  <el-table :data="expenses" style="width: 100%" :stripe='true' :border='true'   table-layout='auto'>
+			  <el-table :data="expenses" style="width: 100%"   :stripe='true' :border='true'   table-layout='auto'>
 				  <el-table-column type="index" />
 			      <el-table-column prop="serial_number" label="流水号"   />
 			      <el-table-column prop="desc" label="收入描述"   />

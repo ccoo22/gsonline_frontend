@@ -1,51 +1,65 @@
 <template>
-	<el-container>
-	      <el-header height='20px' >
-			  我的任务列表
-			</el-header>
-	      <el-main>
-			  <div>
-			  	<span>搜索任务：</span><el-input v-model="search" size="small"  style="width: 200px" placeholder="搜索" /> <br>
+	<el-container style=" height: 100%;">
+	      <el-header height='30px' >
+			  <div class='title'>
+				<div>我的任务列表</div> <div><el-input v-model="search" size="small"  style="width: 200px" placeholder="搜索" /> </div> 
 			  </div>
-			  
-			  <el-table :data="filterTableData" :stripe='true' :border='true' style="width: 100%"  table-layout='auto'>
-				  <el-table-column type="index"  label="行"/>
-				  <el-table-column prop="mission_name" label="操作">
-					  <template #default="scope">
-					  	 <el-button type="primary" round size='small'  @click="show_mission(scope.row.mission_id)">查看</el-button>
-					  </template>
-					  
-				  </el-table-column>
-			      <!-- <el-table-column prop="mission_id" label="id"    /> -->
-			      <el-table-column prop="mission_name" label="任务名"   sortable>
-			  		<template #default="scope">
-						<el-popover
-						    placement="right"
-						    :width="500"
-						    trigger="hover"
-						  >
-						    <p>任务id: {{scope.row.mission_id}}</p>
-						    <template #reference>
-								<span> {{ scope.row.mission_name}} </span>
- 						    </template>
-						  </el-popover>
-			  	    </template>
-				  </el-table-column>
-			      <el-table-column prop="software" label="软件"  sortable />
-			      <el-table-column prop="status" label="运行状态"   sortable :filters='filter_status' :filter-method="filter_status_fun">
-			  		<template #default="scope">
-			  	        <el-tag
-			  	           :type="status_tag(scope.row.status)"  
-			  	          disable-transitions
-			  	          >{{ scope.row.status}}
-			  			</el-tag>
-			  	    </template>
-				  </el-table-column>
-			      <el-table-column prop="date_created" label="接收时间"   sortable />
-			      <el-table-column prop="date_run" label="运行时间"   sortable />
-			      <el-table-column prop="date_finished" label="完成时间"   sortable />
-			    </el-table>
-				
+		</el-header>
+	      <el-main>
+				<el-table :data="filterTableData" :stripe='true' :border='true' style="width: 100%"  table-layout='auto'>
+					<el-table-column type="index"  label="行"/>
+					<el-table-column prop="mission_name" label="操作">
+						<template #default="scope">
+							<el-button type="primary" round size='small'  @click="show_mission(scope.row.mission_id)">查看</el-button>
+							 <el-popconfirm
+							    confirm-button-text="是"
+							    cancel-button-text="否"
+							    title="确定要删除？"
+							    @confirm="confirmDelete(scope.row.mission_id)"
+							  >
+							    <template #reference>
+							      <el-button type="danger" round size='small'>删除</el-button>
+							    </template>
+							  </el-popconfirm>
+							  
+							
+						</template>
+						
+					</el-table-column>
+					<!-- <el-table-column prop="mission_id" label="id"    /> -->
+					<el-table-column prop="mission_name" label="任务名"   sortable>
+						<template #default="scope">
+							<el-popover
+								placement="right"
+								:width="500"
+								trigger="hover"
+							>
+								<p>任务id: {{scope.row.mission_id}}</p>
+								<template #reference>
+									<span> {{ scope.row.mission_name}} </span>
+								</template>
+							</el-popover>
+						</template>
+					</el-table-column>
+					<el-table-column prop="software" label="软件"  sortable >
+						<template #default="scope">
+					         <router-link :to="'/all/' + scope.row.software"> <el-tag  round >{{scope.row.software}}</el-tag> </router-link>
+					    </template>
+					</el-table-column>
+					<el-table-column prop="status" label="运行状态"   sortable :filters='filter_status' :filter-method="filter_status_fun">
+						<template #default="scope">
+							<el-tag
+							:type="status_tag(scope.row.status)"  
+							disable-transitions
+							>{{ scope.row.status}}
+							</el-tag>
+						</template>
+					</el-table-column>
+					<el-table-column prop="date_created" label="接收时间"   sortable />
+					<el-table-column prop="date_run" label="运行时间"   sortable />
+					<el-table-column prop="date_finished" label="完成时间"   sortable />
+				</el-table>
+				  
 				<!-- 分页 -->
 				 
 		  </el-main>
@@ -123,12 +137,33 @@
 			const show_mission = (mission_id) => {
 				router.push({ name: 'MyResult', params:{'mission_id': mission_id}})
 			}
+			
+			// 删除任务
+			const confirmDelete = async (mission_id) =>{
+				const res = await proxy.$my_request.get('/user/delete_mission/'+mission_id)
+				if(res.status === 200){
+					if(res.data.status == 0){
+						// 修改客户端表格
+						const tmps = missions.filter(
+						  (data) => data.mission_id != mission_id
+						)
+						missions.length = 0
+						missions.push(...tmps)
+						ElMessage({type: 'success', duration: 5000, message: '任务删除成功'})
+					}else{
+						ElMessage({type: 'error', duration: 5000, message: '任务删除失败：' + res.data.msg})
+					}
+				}
+			}
 
-			return{missions, filter_status, filter_status_fun, search, filterTableData, status_tag, show_mission}
+			return{missions, filter_status, filter_status_fun, search, filterTableData, status_tag, show_mission, confirmDelete}
 		}
 	}
 </script>
 
-<style>
- 
+<style scoped>
+ .title{
+	 display: flex;
+	 justify-content: space-between;
+ }
 </style>

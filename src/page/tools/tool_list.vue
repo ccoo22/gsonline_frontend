@@ -66,7 +66,7 @@
 			// 布局：宽度 24 固定
 			const layout_width = 24
 			// 每行展示的软件个数
-			const itemcount_per_column = 4
+			const itemcount_per_column = 6
 			// 每个软件占据的宽度 (务必保证能够整除)
 			const span_per_item = layout_width / itemcount_per_column
 
@@ -83,7 +83,7 @@
 							if (res.data.data[i].router === 'normal') {
 								res.data.data[i].router = '/' + software_type.value + '/' + res.data.data[i].software
 							}else{
-								res.data.data[i].router = res.data.data[i].software
+								res.data.data[i].router = '/' + res.data.data[i].software
 							}
 						}
 						// 绑定给 reactive

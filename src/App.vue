@@ -1,6 +1,6 @@
 <template>
 	<div class="common-layout">
-		<el-container>
+		<el-container style="height: 100%;">
 			<!-- 顶部导航 -->
 			<el-header class="top-nav">
 				<div class="title">天昊云</div>
@@ -52,7 +52,7 @@
 					</el-menu>
 				</el-aside>
 				<!-- 右侧内容展示区 -->
-				<el-main id="my-show-content">
+				<el-main :style="defaultHeight">
 					<router-view></router-view>
 				</el-main>
 			</el-container>
@@ -182,12 +182,18 @@
 				})
 
 			}
+			
+			// main 高度设置(顶部导航占用了 60)
+			const defaultHeight = reactive({height: window.innerHeight - 60 + 'px'})
+			 
+			 
 			// 导出
 			return {
 				left_nav_list,
 				is_login,
 				username,
-				btn_log_out
+				btn_log_out,
+				defaultHeight
 			}
 		}
 	}
@@ -232,4 +238,5 @@
 		font-weight: 600;
 		background-color: var(--el-color-primary-light-9);
 	}
+ 
 </style>
