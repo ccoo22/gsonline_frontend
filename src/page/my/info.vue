@@ -53,9 +53,10 @@
 			onMounted(() =>{
 				get_info()
 			})
-			watch(()=>route.path, (path_new, path_old)=>{
-				get_info()
-			})
+			// watch(()=>route.path, (path_new, path_old)=>{
+			// 	// get_info()
+			// 	console.log("info")
+			// })
 			
 			return{info}
 		}

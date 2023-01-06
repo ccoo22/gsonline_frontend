@@ -2,7 +2,7 @@
 	<el-container style=" height: 100%;">
 	      <el-header height='30px' >
 			  <div class='title'>
-				<div>我的任务列表</div> <div><el-input v-model="search" size="small"  style="width: 200px" placeholder="搜索" /> </div> 
+				<div>我的任务列表</div> <div><el-input v-model="search" size="default"  style="width: 200px" placeholder="搜索" clearable  /> </div> 
 			  </div>
 		</el-header>
 	      <el-main>
@@ -26,7 +26,7 @@
 						</template>
 						
 					</el-table-column>
-					<!-- <el-table-column prop="mission_id" label="id"    /> -->
+ 
 					<el-table-column prop="mission_name" label="任务名"   sortable>
 						<template #default="scope">
 							<el-popover
@@ -43,7 +43,7 @@
 					</el-table-column>
 					<el-table-column prop="software" label="软件"  sortable >
 						<template #default="scope">
-					         <router-link :to="'/all/' + scope.row.software"> <el-tag  round >{{scope.row.software}}</el-tag> </router-link>
+					         <router-link :to="'/tools/all/' + scope.row.software"> <el-tag  round >{{scope.row.software}}</el-tag> </router-link>
 					    </template>
 					</el-table-column>
 					<el-table-column prop="status" label="运行状态"   sortable :filters='filter_status' :filter-method="filter_status_fun">
@@ -112,9 +112,9 @@
 			onMounted(() =>{
 				get_missions()
 			})
-			watch(()=>route.path, (path_new, path_old)=>{
-				get_missions()
-			})
+			// watch(()=>route.path, (path_new, path_old)=>{
+			// 	get_missions()
+			// })
 			
 			// 表格处理
 			// status 筛选策略

@@ -21,7 +21,7 @@
 			<el-container>
 				<!-- 左侧导航 -->
 				<el-aside width="200px" class='left-nav'>
-					<el-menu :default-active="left_nav_list[0].router" class="el-menu-vertical-demo" router :unique-opened='true'>
+					<el-menu :default-active="default_active_menu" class="el-menu-vertical-demo" :unique-opened='true' @select="select_menu">
 						<div v-for="(item, index) in left_nav_list" :key="item.id">
 							<!-- 无二级导航 -->
 							<el-menu-item :index="item.router" v-if="!('sub' in item)">
@@ -52,7 +52,7 @@
 					</el-menu>
 				</el-aside>
 				<!-- 右侧内容展示区 -->
-				<el-main :style="defaultHeight">
+				<el-main id="my-show-content" :style="defaultHeight">
 					<router-view></router-view>
 				</el-main>
 			</el-container>
@@ -100,21 +100,21 @@
 				{
 					id: '2',
 					title: '全部',
-					router: '/all',
+					router: '/tools/all',
 					icon: 'icon-all-application',
 					is_active: false
 				},
 				{
 					id: '3',
 					title: '绘图',
-					router: '/plot',
+					router: '/tools/plot',
 					icon: 'Picture',
 					is_active: false
 				},
 				{
 					id: '4',
 					title: '统计',
-					router: '/statistic',
+					router: '/tools/statistic',
 					icon: 'icon-calculator-one',
 					is_active: false
 				},
@@ -147,7 +147,10 @@
 					]
 				},
 			])
- 
+			
+			// menu 默认激活
+			const default_active_menu = ref(left_nav_list[0].router)
+			
 			// 是否登陆
 			const is_login = ref(false)
 			const username = ref('')
@@ -166,7 +169,23 @@
 					is_login.value = true
 					username.value = localStorage.getItem('username')
 				}
+				
+				// all/plot/statistic 的menu特殊标记处理
+				const router_splits = path_new.split('/')
+				if(router_splits[1] === 'my'){
+					default_active_menu.value = '/' + router_splits[1] + '/' + router_splits[2]
+				}else{
+					default_active_menu.value = '/' + router_splits[1]
+				}
+				 
 			})
+			
+			const select_menu = (index, indexPath) =>{
+				// 主页，这里也要设置默认激活标签。如果不添加的话，el-menu 会触发自动跳转 router，估计是bug
+				default_active_menu.value = index
+				router.push(index)
+			}
+			
 			
 			// 退出登陆
 			function btn_log_out(){
@@ -193,7 +212,9 @@
 				is_login,
 				username,
 				btn_log_out,
-				defaultHeight
+				defaultHeight,
+				default_active_menu,
+				select_menu
 			}
 		}
 	}

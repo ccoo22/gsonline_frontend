@@ -1,45 +1,65 @@
 <template>
-	<el-row>
-		<el-col :span="span_per_item" v-for="(item, index) in softwares" :key="item.id">
-			<router-link :to="item.router">
-				<el-card :body-style="{ padding: '0px'}" shadow="always">
-					<template #header>
-						<div class="img-container">
-							<img :src="item.demo_img" class="image" />
-						</div>
-					</template>
-
-					<div style="padding: 14px">
-						<div class='software-name'>{{item.name}}</div>
-						<div class="software-description"> <span :title="item.description">{{item.description}}
-
-							</span> </div>
-
-						<div class="bottom">
-							<div class="view-run-info">
-								<span title="浏览数">
-									<el-icon>
-										<View />
-									</el-icon>&nbsp;{{item.view}}
-								</span>&nbsp;
-								<span title="运行数">
-									<icon-link-cloud />&nbsp;{{item.run}}
-								</span>
+	<el-container style=" height: 100%;">
+		<el-header height='20px' class="header">
+			<div class='title'>
+				<div class="order" > 
+				
+					<el-radio-group v-model="order" class="ml-4">
+				      <el-radio-button label="id" size="default">默认</el-radio-button>
+				      <el-radio-button label="name" size="default">名称<el-icon><Top /></el-icon></el-radio-button>
+				      <el-radio-button label="view" size="default">浏览量<el-icon><Bottom /></el-icon></el-radio-button>
+				      <el-radio-button label="run" size="default">运行量<el-icon><Bottom /></el-icon></el-radio-button>
+				      <el-radio-button label="date_created" size="default">发布日期<el-icon><Bottom /></el-icon></el-radio-button>
+				      <el-radio-button label="date_last_modified" size="default">最近更新<el-icon><Bottom /></el-icon></el-radio-button>
+					</el-radio-group>
+				</div>
+				<div><el-input v-model="search" size="default"  style="width: 200px" placeholder="搜索" clearable  /> </div> 
+			</div>
+		</el-header>
+		<el-main>
+			<el-row>
+				<el-col :span="span_per_item" v-for="(item, index) in filterSoftwares" :key="item.id">
+					<router-link :to="item.router">
+						<el-card :body-style="{ padding: '0px'}" shadow="always">
+							<template #header>
+								<div class="img-container">
+									<img :src="item.demo_img" class="image" />
+								</div>
+							</template>
+				
+							<div style="padding: 14px">
+								<div class='software-name'>{{item.name}}</div>
+								<div class="software-description"> <span :title="item.description">{{item.description}}
+				
+									</span> </div>
+				
+								<div class="bottom">
+									<div class="view-run-info">
+										<span title="浏览数">
+											<el-icon>
+												<View />
+											</el-icon>&nbsp;{{item.view}}
+										</span>&nbsp;
+										<span title="运行数">
+											<icon-link-cloud />&nbsp;{{item.run}}
+										</span>
+									</div>
+									<div class='coin'>
+										<span title="消耗金币">
+											<el-icon><Coin /></el-icon>&nbsp;{{item.price}}
+										</span> 
+										
+									</div>
+								</div>
 							</div>
-							<div class='coin'>
-								<span title="消耗金币">
-									<el-icon><Coin /></el-icon>&nbsp;{{item.price}}
-								</span> 
-								
-							</div>
-						</div>
-					</div>
-				</el-card>
-
-			</router-link>
-		</el-col>
-	</el-row>
-
+						</el-card>
+				
+					</router-link>
+				</el-col>
+			</el-row>
+		</el-main>
+		
+	</el-container>
 </template>
 
 <script>
@@ -71,17 +91,17 @@
 			const span_per_item = layout_width / itemcount_per_column
 
 			// 当前的挑选的工具
-			const software_type = ref('')
+			const tag = ref('')
 			var softwares = reactive([])
 			// 软件列表下载
 			async function get_softwares() {
 				// axios获取数据
-				const res = await proxy.$my_request.get('/api/tools_list/'+software_type.value)
+				const res = await proxy.$my_request.get('/api/tools_list/'+tag.value)
 				if(res.status === 200){
 					if(res.data.status == 0){
 						for (var i = 0; i < res.data.data.length; i++) {
 							if (res.data.data[i].router === 'normal') {
-								res.data.data[i].router = '/' + software_type.value + '/' + res.data.data[i].software
+								res.data.data[i].router = '/tools/' + tag.value + '/' + res.data.data[i].software
 							}else{
 								res.data.data[i].router = '/' + res.data.data[i].software
 							}
@@ -96,19 +116,78 @@
 			}
 			// 挂载、监听路由
 			onMounted(() => {
-				software_type.value = route.name
+				tag.value = route.params.tag
 				get_softwares()
 			})
 			// all/plot/statistic 三个路由之间切换时，不会触发挂载事件（因为他们调用了同一个vue），只会触发watch，因此，这里也要添加数据更新
 			watch(() => route.path, (path_new, path_old) => {
-				software_type.value = route.name
+				tag.value = route.params.tag
+				// 去掉排序标签、默认排序
+				localStorage.removeItem('order')
+				order.value= 'id'
 				get_softwares()
 			})
-
-
+			
+			// 搜索
+			const search = ref('')
+			const filterSoftwares = computed(() =>
+			  softwares.filter(
+			    (data) =>
+			      !search.value ||
+			      data.name.toLowerCase().includes(search.value.toLowerCase()) || data.software.toLowerCase().includes(search.value.toLowerCase()) || data.description.toLowerCase().includes(search.value.toLowerCase()) || data.tag.join().toLowerCase().includes(search.value.toLowerCase())
+			  )
+			)
+			
+			// 排序
+			const order = ref('id')
+			// 获取已选中的排序标签
+			const order_last = localStorage.getItem('order')
+			if(order_last){
+				order.value = order_last
+			} 
+			// 排序事件激活
+			watch(order, (new_val, old_val) => {
+				localStorage.setItem('order', new_val)
+				switch(new_val){
+					case 'id':
+						softwares.sort(sortBy('id',1))
+						break
+					case 'name':
+						softwares.sort(sortBy('name',1))
+						break
+					case 'view':
+						softwares.sort(sortBy('view', -1))
+						break
+					case 'run':
+						softwares.sort(sortBy('run', -1))
+						break
+					case 'date_created':
+						softwares.sort(sortBy('date_created', -1))
+						break
+					case 'date_last_modified':
+						softwares.sort(sortBy('date_last_modified', -1))
+						break
+				}
+				
+			})
+			
+			//attr：根据该属性排序；rev：升序1或降序-1，不填则默认为1
+			function sortBy(attr,rev){
+			    if( rev==undefined ){ rev=1 }else{ (rev)?1:-1; }
+			    return function (a,b){
+			        a=a[attr];
+			        b=b[attr];
+			        if(a<b){ return rev*-1}
+			        if(a>b){ return rev* 1 }
+			        return 0;
+			    }
+			}
 			return {
-				softwares,
-				span_per_item
+				filterSoftwares,
+				span_per_item,
+				search,
+				order
+				
 			}
 		}
 	}
@@ -179,5 +258,10 @@
 		.coin{
 			color: gold;
 		}
+	}
+	
+	.title{
+		 display: flex;
+		 justify-content: space-between;
 	}
 </style>

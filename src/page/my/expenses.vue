@@ -59,9 +59,9 @@
 			onMounted(() =>{
 				get_expenses()
 			})
-			watch(()=>route.path, (path_new, path_old)=>{
-				get_expenses()
-			})
+			// watch(()=>route.path, (path_new, path_old)=>{
+			// 	get_expenses()
+			// })
 			
 			return{expenses}
 		}

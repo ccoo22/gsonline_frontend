@@ -45,7 +45,7 @@
 					<!-- 有多个表格 -->
 					<el-tabs tab-position="left" v-if='item.value.length > 1'>
 					    <el-tab-pane :label="item_table.name" v-for="(item_table, index_table) in item.value" :key='index_table'>
-							<el-table :data="item_table.value" style="width: 100%" stripe >
+							<el-table :data="item_table.value" style="width: 100%" stripe highlight-current-row>
 							    <el-table-column v-for="(item_title, title_index) in item_table.title" :key='title_index' :prop="item_title" :label="item_title"/>
 							  </el-table>
 						</el-tab-pane>

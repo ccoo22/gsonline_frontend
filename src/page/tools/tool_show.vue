@@ -1,313 +1,316 @@
 <template>
-	<el-row class="software-show" align='top' ref="row_ref"   v-if="'ui' in software_details" >
-		
+	<el-row class="software-show" align='top' ref="row_ref" v-if="'ui' in software_details" >
+		 
 		<el-col class="form-window" :span="14"   >
-			<div class='title'> 
-				<span >{{software_details.name}}</span>
-			</div>
-			<!-- 表单 -->
-			<el-form
-			    ref="my_form"
-			    :model="my_form_model"
-				:rules="my_form_rules"
-			    label-width="120px"
-			    class="demo-ruleForm"
-			>
-				<el-row>
-					<el-col :span="15" >
-						<el-form-item label="任务名">
-							<template #label>
-								<el-tooltip
-								    content="给当前任务取一个便于区分的名字"
-								    raw-content
-									placement="top-start" 
-									effect="dark"
-								  >
-								  <span>任务名</span>
-								</el-tooltip>
-							</template>
-							<el-input v-model="my_form_model.mission_name"  />
-						</el-form-item>
-					</el-col>
-					<el-col :span="8" >
-					</el-col>
-					
-					<el-col :span="item.span" :offset="item.offset" v-for="(item, index) in software_details.ui" :key='index'>
-
-						
-						<!-- upload 文件输入 -->
-						<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'upload'">
-							<template #label>
-								
-								<el-tooltip
-								    :content="item.desc"
-								    raw-content
-									placement="top-start" 
-									effect="dark"
-								  >
-								  <span>{{item.label}}</span>
-								</el-tooltip>
-								
-							</template>
-							
-							<el-upload
-								style="width: 100%;"
-								action=""
-								v-model:file-list="my_form_model[item.name]"
-								:multiple="item.multiple"
-								:limit="item.limit"
-								:auto-upload="false"
-								:show-file-list="true"
-							>
-								<el-button type="primary">{{item.placeholder}}</el-button>
-							</el-upload>
-						</el-form-item>
-						
-						<!-- input-text 输入框 -->
-						<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'input-text'">
-							<template #label>
-								<el-tooltip
-								    :content="item.desc"
-								    raw-content
-									placement="top-start" 
-									effect="dark"
-								  >
-								  <span>{{item.label}}</span>
-								</el-tooltip>
-							</template>
-							<el-input v-model="my_form_model[item.name]" :placeholder="item.placeholder" clearable />
-						</el-form-item>
-						
-						<!-- input-textarea 输入框 -->
-						<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'input-textarea'">
-							<template #label>
-								<el-tooltip
-								    :content="item.desc"
-								    raw-content
-									placement="top-start" 
-									effect="dark"
-								  >
-								  <span>{{item.label}}</span>
-								</el-tooltip>
-							</template> 
-							<el-input v-model="my_form_model[item.name]" :placeholder="item.placeholder" :rows="item.rows" type="textarea" clearable />
-						</el-form-item>
-						
-						<!-- input-number 数字输入框 -->
-						<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'input-number'">
-							<template #label>
-								<el-tooltip
-								    :content="item.desc"
-								    raw-content
-									placement="top-start" 
-									effect="dark"
-								  >
-								  <span>{{item.label}}</span>
-								</el-tooltip>
-							</template>
-							 <el-input-number v-model="my_form_model[item.name]" :min="item.min" :max="item.max" :step="item.step" size='small'/>
-						</el-form-item>
-						
-						<!-- select 单选框 -->
-						<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'select'">
-							<template #label>
-								<el-tooltip
-								    :content="item.desc"
-								    raw-content
-									placement="top-start" 
-									effect="dark"
-								  >
-								  <span>{{item.label}}</span>
-								</el-tooltip>
-							</template>
-							   <el-select v-model="my_form_model[item.name]" :placeholder="item.placeholder" :multiple='false'>
-							     <el-option
-							       v-for="(opt, opt_index) in item.options"
-							       :key="opt"
-							       :value="opt"
-							     >
-									<div v-html="item.options_label[opt_index]"></div>
-								 </el-option>
-							   </el-select>
-						</el-form-item>
-						
-						<!-- select-multiple 多选框 -->
-						<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'select-multiple'">
-							<template #label>
-								<el-tooltip
-								    :content="item.desc"
-								    raw-content
-									placement="top-start" 
-									effect="dark"
-								  >
-								  <span>{{item.label}}</span>
-								</el-tooltip>
-							</template>
-							   <el-select v-model="my_form_model[item.name]" :placeholder="item.placeholder" :multiple='true'>
-							     <el-option
-							       v-for="(opt, opt_index) in item.options"
-							       :key="opt"
-							       :value="opt"
-							     >
-									<div v-html="item.options_label[opt_index]"></div>
-								 </el-option>
-							   </el-select>
-						</el-form-item>
-						
-						<!-- checkbox 单选 -->
-						<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'checkbox'">
-							<template #label>
-								<el-tooltip
-								    :content="item.desc"
-								    raw-content
-									placement="top-start" 
-									effect="dark"
-								  >
-								  <span>{{item.label}}</span>
-								</el-tooltip>
-							</template>
-							   <el-checkbox v-model="my_form_model[item.name]" />
-						</el-form-item>
-						
-						<!-- checkbox-group 多选 -->
-						<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'checkbox-group'">
-							<template #label>
-								<el-tooltip
-								    :content="item.desc"
-								    raw-content
-									placement="top-start" 
-									effect="dark"
-								  >
-								  <span>{{item.label}}</span>
-								</el-tooltip>
-							</template>
-							   <el-checkbox-group v-model="my_form_model[item.name]">
-							       <el-checkbox :label="opt" v-for="opt in item.options" />
-							     </el-checkbox-group>
-						</el-form-item>
-						
-						<!-- switch 开关 -->
-						<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'switch'">
-							<template #label>
-								<el-tooltip
-								    :content="item.desc"
-								    raw-content
-									placement="top-start" 
-									effect="dark"
-								  >
-								  <span>{{item.label}}</span>
-								</el-tooltip>
-							</template>
-							    <el-switch
-							       v-model="my_form_model[item.name]"
-							       :active-text="item.active_text"
-							       :inactive-text="item.inactive_text"
-							     />
-						</el-form-item>
-						
-						
-						<!-- slider 数字滑块 -->
-						<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'slider'">
-							<template #label>
-								<el-tooltip
-								    :content="item.desc"
-								    raw-content
-									placement="top-start" 
-									effect="dark"
-								  >
-								  <span>{{item.label}}</span>
-								</el-tooltip>
-							</template>
-							    <el-slider v-model="my_form_model[item.name]" show-input :min="item.min" :max="item.max" :step="item.step" />
-						</el-form-item>
-						
-						<!-- slider-range 数字滑块，选范围 -->
-						<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'slider-range'">
-							<template #label>
-								<el-tooltip
-								    :content="item.desc"
-								    raw-content
-									placement="top-start" 
-									effect="dark"
-								  >
-								  <span>{{item.label}}</span>
-								</el-tooltip>
-							</template>
-							    <el-slider v-model="my_form_model[item.name]" range :min="item.min" :max="item.max" :step="item.step" />
-						</el-form-item>
-						
-						
-						<!-- color-picker 选颜色 -->
-						<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'color-picker'">
-							<template #label>
-								<el-tooltip
-								    :content="item.desc"
-								    raw-content
-									placement="top-start" 
-									effect="dark"
-								  >
-								  <span>{{item.label}}</span>
-								</el-tooltip>
-							</template>
-							    <el-color-picker v-model="my_form_model[item.name]" />
-						</el-form-item>
-						
-						<!-- radio-group 单选框 -->
-						<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'radio-group'">
-							<template #label>
-								<el-tooltip
-								    :content="item.desc"
-								    raw-content
-									placement="top-start" 
-									effect="dark"
-								  >
-								  <span>{{item.label}}</span>
-								</el-tooltip>
-							</template>
-							    <el-radio-group v-model="my_form_model[item.name]">
-							          <el-radio :label="opt" v-for="opt in item.options"> {{opt}} </el-radio>
-							        </el-radio-group>
-						</el-form-item>
-						
-						<!-- 分割线 -->
-						<el-divider :border-style="item.border_style" :content-position='item.content_position' v-if="item.type === 'divider'"> 
-						<div v-html="item.desc"></div>
-						</el-divider>
- 
-
-					</el-col>
-				</el-row>
-			
-			</el-form>
-			
-
-			<!-- 进度条 -->
-			<div class="progress" v-if="btn_status.loading">
-				<el-progress type="dashboard" :percentage="upLoadProgress">
-				      <template #default="{ percentage }">
-				        <span class="percentage-value">{{ upLoadProgress }}%</span><br>
-				        <span class="percentage-label">Uploading</span>
-				      </template>
-				    </el-progress>
-			</div>
-			<div class='cost'>
-				<div class='gold'>
-					<span title="消耗金币">
-						<el-icon><Coin /></el-icon>&nbsp;{{software_details.price}}
-					</span> 
+			<div class="content">
+				<div class='title'>
+					<span >{{software_details.name}}</span>
 				</div>
+				<!-- 表单 -->
+				<el-form
+				    ref="my_form"
+				    :model="my_form_model"
+					:rules="my_form_rules"
+				    label-width="120px"
+				    class="demo-ruleForm"
+				>
+					<el-row>
+						<el-col :span="15" >
+							<el-form-item label="任务名">
+								<template #label>
+									<el-tooltip
+									    content="给当前任务取一个便于区分的名字"
+									    raw-content
+										placement="top-start" 
+										effect="dark"
+									  >
+									  <span>任务名</span>
+									</el-tooltip>
+								</template>
+								<el-input v-model="my_form_model.mission_name"  />
+							</el-form-item>
+						</el-col>
+						<el-col :span="8" >
+						</el-col>
+						
+						<el-col :span="item.span" :offset="item.offset" v-for="(item, index) in software_details.ui" :key='index'>
 				
-			</div>
-			<!-- 上传按钮 -->
-			<div class='button'>
-				<el-button type='success' @click='btn_start_run(my_form)' :loading='btn_status.loading' :disabled='btn_status.disabled'> {{btn_status.msg}}</el-button>
+							
+							<!-- upload 文件输入 -->
+							<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'upload'">
+								<template #label>
+									
+									<el-tooltip
+									    :content="item.desc"
+									    raw-content
+										placement="top-start" 
+										effect="dark"
+									  >
+									  <span>{{item.label}}</span>
+									</el-tooltip>
+									
+								</template>
+								
+								<el-upload
+									style="width: 100%;"
+									action=""
+									v-model:file-list="my_form_model[item.name]"
+									:multiple="item.multiple"
+									:limit="item.limit"
+									:auto-upload="false"
+									:show-file-list="true"
+								>
+									<el-button type="primary">{{item.placeholder}}</el-button>
+								</el-upload>
+							</el-form-item>
+							
+							<!-- input-text 输入框 -->
+							<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'input-text'">
+								<template #label>
+									<el-tooltip
+									    :content="item.desc"
+									    raw-content
+										placement="top-start" 
+										effect="dark"
+									  >
+									  <span>{{item.label}}</span>
+									</el-tooltip>
+								</template>
+								<el-input v-model="my_form_model[item.name]" :placeholder="item.placeholder" clearable />
+							</el-form-item>
+							
+							<!-- input-textarea 输入框 -->
+							<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'input-textarea'">
+								<template #label>
+									<el-tooltip
+									    :content="item.desc"
+									    raw-content
+										placement="top-start" 
+										effect="dark"
+									  >
+									  <span>{{item.label}}</span>
+									</el-tooltip>
+								</template> 
+								<el-input v-model="my_form_model[item.name]" :placeholder="item.placeholder" :rows="item.rows" type="textarea" clearable />
+							</el-form-item>
+							
+							<!-- input-number 数字输入框 -->
+							<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'input-number'">
+								<template #label>
+									<el-tooltip
+									    :content="item.desc"
+									    raw-content
+										placement="top-start" 
+										effect="dark"
+									  >
+									  <span>{{item.label}}</span>
+									</el-tooltip>
+								</template>
+								 <el-input-number v-model="my_form_model[item.name]" :min="item.min" :max="item.max" :step="item.step" size='small'/>
+							</el-form-item>
+							
+							<!-- select 单选框 -->
+							<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'select'">
+								<template #label>
+									<el-tooltip
+									    :content="item.desc"
+									    raw-content
+										placement="top-start" 
+										effect="dark"
+									  >
+									  <span>{{item.label}}</span>
+									</el-tooltip>
+								</template>
+								   <el-select v-model="my_form_model[item.name]" :placeholder="item.placeholder" :multiple='false'>
+								     <el-option
+								       v-for="(opt, opt_index) in item.options"
+								       :key="opt"
+								       :value="opt"
+								     >
+										<div v-html="item.options_label[opt_index]"></div>
+									 </el-option>
+								   </el-select>
+							</el-form-item>
+							
+							<!-- select-multiple 多选框 -->
+							<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'select-multiple'">
+								<template #label>
+									<el-tooltip
+									    :content="item.desc"
+									    raw-content
+										placement="top-start" 
+										effect="dark"
+									  >
+									  <span>{{item.label}}</span>
+									</el-tooltip>
+								</template>
+								   <el-select v-model="my_form_model[item.name]" :placeholder="item.placeholder" :multiple='true'>
+								     <el-option
+								       v-for="(opt, opt_index) in item.options"
+								       :key="opt"
+								       :value="opt"
+								     >
+										<div v-html="item.options_label[opt_index]"></div>
+									 </el-option>
+								   </el-select>
+							</el-form-item>
+							
+							<!-- checkbox 单选 -->
+							<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'checkbox'">
+								<template #label>
+									<el-tooltip
+									    :content="item.desc"
+									    raw-content
+										placement="top-start" 
+										effect="dark"
+									  >
+									  <span>{{item.label}}</span>
+									</el-tooltip>
+								</template>
+								   <el-checkbox v-model="my_form_model[item.name]" />
+							</el-form-item>
+							
+							<!-- checkbox-group 多选 -->
+							<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'checkbox-group'">
+								<template #label>
+									<el-tooltip
+									    :content="item.desc"
+									    raw-content
+										placement="top-start" 
+										effect="dark"
+									  >
+									  <span>{{item.label}}</span>
+									</el-tooltip>
+								</template>
+								   <el-checkbox-group v-model="my_form_model[item.name]">
+								       <el-checkbox :label="opt" v-for="opt in item.options" />
+								     </el-checkbox-group>
+							</el-form-item>
+							
+							<!-- switch 开关 -->
+							<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'switch'">
+								<template #label>
+									<el-tooltip
+									    :content="item.desc"
+									    raw-content
+										placement="top-start" 
+										effect="dark"
+									  >
+									  <span>{{item.label}}</span>
+									</el-tooltip>
+								</template>
+								    <el-switch
+								       v-model="my_form_model[item.name]"
+								       :active-text="item.active_text"
+								       :inactive-text="item.inactive_text"
+								     />
+							</el-form-item>
+							
+							
+							<!-- slider 数字滑块 -->
+							<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'slider'">
+								<template #label>
+									<el-tooltip
+									    :content="item.desc"
+									    raw-content
+										placement="top-start" 
+										effect="dark"
+									  >
+									  <span>{{item.label}}</span>
+									</el-tooltip>
+								</template>
+								    <el-slider v-model="my_form_model[item.name]" show-input :min="item.min" :max="item.max" :step="item.step" />
+							</el-form-item>
+							
+							<!-- slider-range 数字滑块，选范围 -->
+							<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'slider-range'">
+								<template #label>
+									<el-tooltip
+									    :content="item.desc"
+									    raw-content
+										placement="top-start" 
+										effect="dark"
+									  >
+									  <span>{{item.label}}</span>
+									</el-tooltip>
+								</template>
+								    <el-slider v-model="my_form_model[item.name]" range :min="item.min" :max="item.max" :step="item.step" />
+							</el-form-item>
+							
+							
+							<!-- color-picker 选颜色 -->
+							<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'color-picker'">
+								<template #label>
+									<el-tooltip
+									    :content="item.desc"
+									    raw-content
+										placement="top-start" 
+										effect="dark"
+									  >
+									  <span>{{item.label}}</span>
+									</el-tooltip>
+								</template>
+								    <el-color-picker v-model="my_form_model[item.name]" />
+							</el-form-item>
+							
+							<!-- radio-group 单选框 -->
+							<el-form-item :label="item.label" :prop="item.name" :required="item.required" v-if="item.type === 'radio-group'">
+								<template #label>
+									<el-tooltip
+									    :content="item.desc"
+									    raw-content
+										placement="top-start" 
+										effect="dark"
+									  >
+									  <span>{{item.label}}</span>
+									</el-tooltip>
+								</template>
+								    <el-radio-group v-model="my_form_model[item.name]">
+								          <el-radio :label="opt" v-for="opt in item.options"> {{opt}} </el-radio>
+								        </el-radio-group>
+							</el-form-item>
+							
+							<!-- 分割线 -->
+							<el-divider :border-style="item.border_style" :content-position='item.content_position' v-if="item.type === 'divider'"> 
+							<div v-html="item.desc"></div>
+							</el-divider>
+				 
+				
+						</el-col>
+					</el-row>
+				
+				</el-form>
+				
+				
+				<!-- 进度条 -->
+				<div class="progress" v-if="btn_status.loading">
+					<el-progress type="dashboard" :percentage="upLoadProgress">
+					      <template #default="{ percentage }">
+					        <span class="percentage-value">{{ upLoadProgress }}%</span><br>
+					        <span class="percentage-label">Uploading</span>
+					      </template>
+					    </el-progress>
+				</div>
+				<div class='cost'>
+					<div class='gold'>
+						<span title="消耗金币">
+							<el-icon><Coin /></el-icon>&nbsp;{{software_details.price}}
+						</span> 
+					</div>
+					
+				</div>
+				<!-- 上传按钮 -->
+				<div class='button'>
+					<el-button type='success' @click='btn_start_run(my_form)' :loading='btn_status.loading' :disabled='btn_status.disabled'> {{btn_status.msg}}</el-button>
+				</div>
+				 
 			</div>
 			
 		</el-col>
 		
 		<!-- 用法 -->
-		<el-col class="form-usage" :span="9" >
-			 
+		<el-col class="form-usage" :span="8" :style="usageHeight" >
+			 <el-scrollbar>
 				<div class='title'><span >
 					示例图
 				</span></div>
@@ -324,13 +327,14 @@
 				<el-descriptions title="&nbsp;其他" border :column='1' size='small'>
 					<el-descriptions-item label="版本">{{software_details.version}}</el-descriptions-item>
 					<el-descriptions-item label="标签">{{software_details.tag.join()}}</el-descriptions-item>
+					<el-descriptions-item label="发布日期">{{software_details.date_created}}</el-descriptions-item>
 					<el-descriptions-item label="最近更新">{{software_details.date_last_modified}}</el-descriptions-item>
 					<el-descriptions-item label="引用">{{software_details.citation}}</el-descriptions-item>
  				</el-descriptions>
-
+				 </el-scrollbar>
 		</el-col>
 	</el-row>
-		
+
 </template>
 
 <script  >
@@ -395,10 +399,11 @@
 				software_name.value = route.params.software
 				get_software()
 			})
-			watch(()=>route.path, (path_new, path_old)=>{
-				software_name.value = route.params.software
-				get_software()
-			})
+			// watch(()=>route.path, (path_new, path_old)=>{
+			// 	// software_name.value = route.params.software
+			// 	// get_software()
+			// 	console.log("离开软件页面了，但是还是激活了 watch", software_name.value)
+			// })
 			
 			
 			// 按钮状态
@@ -468,55 +473,59 @@
 				
 			}
 			
-			
-			return {my_form, my_form_model, my_form_rules, software_details, software_helps, btn_status, btn_start_run, upLoadProgress}
+			// usage 页面高度定义
+			const usageHeight = reactive({height: window.innerHeight - 60 - 20 - 24 + 'px'})
+
+			return {my_form, my_form_model, my_form_rules, software_details, software_helps, btn_status, btn_start_run, upLoadProgress, usageHeight}
 		}
 	}
 </script>
 
 <style lang="less">
 	.software-show{
-		 // flex-wrap: wrap;
 		 position: relative;
-		.form-window{
-			height: 100%;
-			z-index: 100;
-			background-color: white;
-			border-radius: 1rem;
-			margin: 8px 12px;
-			padding: 12px 0;
-			box-shadow: var(--el-box-shadow);
-			.title{
-				font-size: 2rem;
-				display: flex;
-				justify-content: center;
-				margin-bottom: 1rem;
-				
-			}
-			.button{
-				display: flex;
-				justify-content: center;
-				margin-bottom: 1rem;
-			}
-			.progress{
-				display: flex;
-				justify-content: center;
-				margin-bottom: 1rem;
-			}
-			.cost{
-				display: flex;
-				justify-content: center ;
-				color: gold;
-				margin: 10px 10px;
-			}
-			
-		}
+		 width: 100%;
+		 height: 100%;
+		 .form-window{
+			 // z-index: 100;
+			 .content{
+				background-color: white;
+				border-radius: 1rem;
+				margin: 8px 12px 20px 12px;
+				padding: 12px 0;
+				box-shadow: var(--el-box-shadow);
+				.title{
+					font-size: 2rem;
+					display: flex;
+					justify-content: center;
+					margin-bottom: 1rem;
+					
+				}
+				.button{
+					display: flex;
+					justify-content: center;
+					margin-bottom: 1rem;
+				}
+				.progress{
+					display: flex;
+					justify-content: center;
+					margin-bottom: 1rem;
+				}
+				.cost{
+					display: flex;
+					justify-content: center ;
+					color: gold;
+					margin: 10px 10px;
+				}
+			 }
+			 
+		 }
+		
 		.form-usage{
-			// position: fixed;
-			// right: 1.5%;
-			// width: 33%;
+			position: fixed;
+			right: 1.5%;
 			background-color: white;
-			margin: 8px 8px;
+			margin: 8px 0px 20px 12px;
 			padding: 12px 0;
 			border-radius: 1rem;
 			box-shadow: var(--el-box-shadow);
@@ -528,7 +537,6 @@
 			.demo-image{
 				// margin: 1rem auto 1rem auto;
 				width: 100%;
-				
 			}
 		}
 	}
