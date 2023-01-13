@@ -64,7 +64,8 @@
 	import {
 		watch,
 		reactive,
-		ref
+		ref,
+		computed
 	} from 'vue'
 	import {
 		HomeFilled,
@@ -148,6 +149,10 @@
 				},
 			])
 			
+			// 面包屑导航设计
+			
+			const breadcrumb_nav = reactive([])
+			
 			// menu 默认激活
 			const default_active_menu = ref(left_nav_list[0].router)
 			
@@ -170,15 +175,18 @@
 					username.value = localStorage.getItem('username')
 				}
 				
-				// all/plot/statistic 的menu特殊标记处理
+				// 当前激活的menu
 				const router_splits = path_new.split('/')
-				if(router_splits[1] === 'my'){
-					default_active_menu.value = '/' + router_splits[1] + '/' + router_splits[2]
+				if(router_splits[1] === 'home'){
+					default_active_menu.value = path_new
 				}else{
-					default_active_menu.value = '/' + router_splits[1]
+					default_active_menu.value = '/' + router_splits[1] + '/' + router_splits[2]
 				}
-				 
+				
 			})
+			
+
+
 			
 			const select_menu = (index, indexPath) =>{
 				// 主页，这里也要设置默认激活标签。如果不添加的话，el-menu 会触发自动跳转 router，估计是bug
@@ -214,7 +222,8 @@
 				btn_log_out,
 				defaultHeight,
 				default_active_menu,
-				select_menu
+				select_menu,
+				breadcrumb_nav
 			}
 		}
 	}
@@ -238,7 +247,7 @@
 		}
 
 		.login {
-			font-size: 0.5rem;
+			font-size: 1rem;
 			display: flex;
 			// width: 120px;
 			justify-content: space-between;
@@ -255,9 +264,12 @@
 		background-color: var(--el-bg-color-page);
 	}
 	.is-active{
-		color: var(--brand-color);
+		// color: var(--brand-color);
 		font-weight: 600;
 		background-color: var(--el-color-primary-light-9);
+	}
+	#breadcrumb-nav{
+		margin-bottom: 10px;
 	}
  
 </style>

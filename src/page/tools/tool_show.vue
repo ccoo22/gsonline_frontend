@@ -310,28 +310,44 @@
 		
 		<!-- 用法 -->
 		<el-col class="form-usage" :span="8" :style="usageHeight" >
-			 <el-scrollbar>
-				<div class='title'><span >
-					示例图
-				</span></div>
-				<div class="demo-image">
-					<el-image :src="software_details.demo_img"  :preview-src-list='[software_details.demo_img]' :hide-on-click-modal='true' fit='contain' />
-				</div>
-				<hr>
-	
-				<el-descriptions title="&nbsp;参数说明" border :column='1' size='small'>
-					<el-descriptions-item :label="item.label" v-for="(item, index) in software_helps" :key='index' :width='15'> <div v-html="item.desc"></div> </el-descriptions-item>
-				</el-descriptions>
+			<el-tabs v-model="usage_activeName" type='border-card' style="height: 100%; border-bottom: 0px;">
+			    <el-tab-pane label="描述" name="usage" style="overflow: auto;">
+					<el-scrollbar :max-height="contentHeight">
+						  <el-card class="box-card" shadow='never' style="height: 100%;border: 0px;">
+							<div style="width: 1000px"></div>
+ 						    <div v-html="software_details.usage" ></div> 
+						  </el-card>
+					</el-scrollbar>
+				</el-tab-pane>
 				
-				<hr>
-				<el-descriptions title="&nbsp;其他" border :column='1' size='small'>
-					<el-descriptions-item label="版本">{{software_details.version}}</el-descriptions-item>
-					<el-descriptions-item label="标签">{{software_details.tag.join()}}</el-descriptions-item>
-					<el-descriptions-item label="发布日期">{{software_details.date_created}}</el-descriptions-item>
-					<el-descriptions-item label="最近更新">{{software_details.date_last_modified}}</el-descriptions-item>
-					<el-descriptions-item label="引用">{{software_details.citation}}</el-descriptions-item>
- 				</el-descriptions>
-				 </el-scrollbar>
+			    <el-tab-pane label="参数说明" name="params">
+					<el-scrollbar :max-height="contentHeight">
+						<el-descriptions title="" border :column='1' size='small'>
+							<el-descriptions-item :label="item.label" v-for="(item, index) in software_helps" :key='index' :width='150000' > <div v-html="item.desc"></div> </el-descriptions-item>
+						</el-descriptions>
+					</el-scrollbar>
+				</el-tab-pane>
+				
+			    <el-tab-pane label="示例图" name="pic">
+					<el-card shadow="never" class="usage">
+						<div style="width: 1000px"></div>
+					    <el-image :src="software_details.demo_img"  :preview-src-list='[software_details.demo_img]' :hide-on-click-modal='true' fit='contain' />
+					</el-card>
+				</el-tab-pane>
+				
+			    <el-tab-pane label="工具信息" name="tool_info">
+					<el-descriptions title="" border :column='1' size='small'  :max-height="contentHeight">
+						<el-descriptions-item label="版本"  :width='150000'>{{software_details.version}}</el-descriptions-item>
+						<el-descriptions-item label="标签"  :width='150000'>
+							<router-link v-for="tag in software_details.tag" :to="'/tools/' + tag"> <el-tag  round >{{tag}}</el-tag> </router-link>
+						</el-descriptions-item>
+						<el-descriptions-item label="发布日期" :width='150000'>{{software_details.date_created}}</el-descriptions-item>
+						<el-descriptions-item label="最近更新" :width='150000'>{{software_details.date_last_modified}}</el-descriptions-item>
+						<el-descriptions-item label="引用" :width='150000'>{{software_details.citation}}</el-descriptions-item>
+					</el-descriptions>
+				</el-tab-pane>
+			  </el-tabs>
+			  
 		</el-col>
 	</el-row>
 
@@ -474,9 +490,12 @@
 			}
 			
 			// usage 页面高度定义
-			const usageHeight = reactive({height: window.innerHeight - 60 - 20 - 24 + 'px'})
-
-			return {my_form, my_form_model, my_form_rules, software_details, software_helps, btn_status, btn_start_run, upLoadProgress, usageHeight}
+			const usageHeight = reactive({'max-height': window.innerHeight - 60 - 20 - 24 + 'px'})
+			// usage tab 页面高度
+			const contentHeight = ref(window.innerHeight - 60 - 20 - 24 - 100 + 'px')
+			// tab 默认
+			const usage_activeName = ref('usage')
+			return {my_form, my_form_model, my_form_rules, software_details, software_helps, btn_status, btn_start_run, upLoadProgress, usageHeight, contentHeight, usage_activeName}
 		}
 	}
 </script>
@@ -529,15 +548,17 @@
 			padding: 12px 0;
 			border-radius: 1rem;
 			box-shadow: var(--el-box-shadow);
-			.title{
-				display: flex;
-				justify-content: center;
-				margin-bottom: 1rem;
-			}
-			.demo-image{
-				// margin: 1rem auto 1rem auto;
-				width: 100%;
-			}
+ 
+			// .demo-image{
+			// 	// margin: 1rem auto 1rem auto;
+			// 	width: 100%;
+			// }
+			// .usage{
+			// 	border: 0px;
+			// 	width: 100%;
+			// 	display: flex;
+			// 	justify-content: center;
+			// }
 		}
 	}
 	

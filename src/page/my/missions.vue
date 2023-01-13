@@ -2,12 +2,13 @@
 	<el-container style=" height: 100%;">
 	      <el-header height='30px' >
 			  <div class='title'>
-				<div>我的任务列表</div> <div><el-input v-model="search" size="default"  style="width: 200px" placeholder="搜索" clearable  /> </div> 
+				 
+				<div class='el-descriptions__title'>我的任务列表</div> <div><el-input v-model="search" size="default"  style="width: 200px" placeholder="搜索" clearable  /> </div> 
 			  </div>
 		</el-header>
 	      <el-main>
 				<el-table :data="filterTableData" :stripe='true' :border='true' style="width: 100%"  table-layout='auto'>
-					<el-table-column type="index"  label="行"/>
+					<el-table-column prop="id" label="编号"></el-table-column>
 					<el-table-column prop="mission_name" label="操作">
 						<template #default="scope">
 							<el-button type="primary" round size='small'  @click="show_mission(scope.row.mission_id)">查看</el-button>
@@ -61,7 +62,16 @@
 				</el-table>
 				  
 				<!-- 分页 -->
-				 
+				<el-pagination 
+				  background 
+				  layout="total, sizes, prev, pager, next, jumper" 
+				  :page-sizes="[15, 30, 50, 100]"
+				  v-model:current-page="currentPage"
+				  v-model:page-size="pageSize"
+				  prev-text='上一页'
+				  next-text='下一页'
+				  hide-on-single-page
+				  :total="totalItemCount" />
 		  </el-main>
 	</el-container>
 	
@@ -84,6 +94,7 @@
 			} = getCurrentInstance()
 			
 			// 任务列表
+			// 原始总任务表格
 			const missions = reactive([])
 			// 软件详细信息获取
 			async function get_missions() {
@@ -100,7 +111,6 @@
 						if(res.data.status == 0){
 							missions.length = 0
 							missions.push(...res.data.data)
-							
 						}
 					}
 				}
@@ -125,13 +135,29 @@
 			
 			// 搜索
 			const search = ref('')
-			const filterTableData = computed(() =>
-			  missions.filter(
-			    (data) =>
-			      !search.value ||
-			      data.mission_name.toLowerCase().includes(search.value.toLowerCase()) || data.software.toLowerCase().includes(search.value.toLowerCase())
-			  )
+			const pageSize  = ref(15) // 每页显示数量
+			const currentPage = ref(1)  // 当前页码
+			const totalItemCount = ref(100)
+			const filterTableData = computed(() =>{
+				// 搜索筛选
+				const res = missions.filter(
+				  (data) =>
+				    !search.value ||
+				    data.mission_name.toLowerCase().includes(search.value.toLowerCase()) || data.software.toLowerCase().includes(search.value.toLowerCase())
+				)
+				// 分页
+				totalItemCount.value = res.length
+				const index_start = (currentPage.value - 1) * pageSize.value
+				var index_end = currentPage.value * pageSize.value - 1
+				if(index_end >= res.length){
+				    index_end = res.length - 1
+				}
+				// 返回当前分页数据
+				return res.slice(index_start, index_end + 1)
+			  }
+				
 			)
+			
 			
 			// 跳转到任务详情页
 			const show_mission = (mission_id) => {
@@ -156,7 +182,7 @@
 				}
 			}
 
-			return{missions, filter_status, filter_status_fun, search, filterTableData, status_tag, show_mission, confirmDelete}
+			return{missions, filter_status, filter_status_fun, search, filterTableData, status_tag, show_mission, confirmDelete, pageSize, currentPage,totalItemCount  }
 		}
 	}
 </script>

@@ -57,6 +57,19 @@
 					</router-link>
 				</el-col>
 			</el-row>
+			
+			<!-- 分页 -->
+			<el-pagination 
+			  background 
+			  layout="total, sizes, prev, pager, next, jumper" 
+			  :page-sizes="itemcount_per_page"
+			  v-model:current-page="currentPage"
+			  v-model:page-size="pageSize"
+			  prev-text='上一页'
+			  next-text='下一页'
+			  hide-on-single-page
+			  :total="totalItemCount" />
+			  
 		</el-main>
 		
 	</el-container>
@@ -87,6 +100,7 @@
 			const layout_width = 24
 			// 每行展示的软件个数
 			const itemcount_per_column = 6
+			const itemcount_per_page = [itemcount_per_column * 3, itemcount_per_column * 6, itemcount_per_column * 10, itemcount_per_column * 20]
 			// 每个软件占据的宽度 (务必保证能够整除)
 			const span_per_item = layout_width / itemcount_per_column
 
@@ -130,12 +144,27 @@
 			
 			// 搜索
 			const search = ref('')
-			const filterSoftwares = computed(() =>
-			  softwares.filter(
+			const pageSize  = ref(itemcount_per_page[0]) // 每页显示数量
+			const currentPage = ref(1)  // 当前页码
+			const totalItemCount = ref(100)
+			const filterSoftwares = computed(() =>{
+				// 搜索筛选
+				const res = softwares.filter(
 			    (data) =>
 			      !search.value ||
 			      data.name.toLowerCase().includes(search.value.toLowerCase()) || data.software.toLowerCase().includes(search.value.toLowerCase()) || data.description.toLowerCase().includes(search.value.toLowerCase()) || data.tag.join().toLowerCase().includes(search.value.toLowerCase())
 			  )
+				// 分页
+				totalItemCount.value = res.length
+				const index_start = (currentPage.value - 1) * pageSize.value
+				var index_end = currentPage.value * pageSize.value - 1
+				if(index_end >= res.length){
+				    index_end = res.length - 1
+				}
+				// 返回当前分页数据
+				return res.slice(index_start, index_end + 1)
+			  }
+				
 			)
 			
 			// 排序
@@ -186,7 +215,12 @@
 				filterSoftwares,
 				span_per_item,
 				search,
-				order
+				order,
+				currentPage,
+				pageSize,
+				totalItemCount,
+				itemcount_per_page
+				
 				
 			}
 		}
