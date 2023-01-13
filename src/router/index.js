@@ -14,12 +14,12 @@ const routes = [
   {
     path: '/tools/:tag',
     name: 'ToolList',
-    component: () => import(/* webpackChunkName: "Home" */ '../page/tools/tool_list.vue')
+    component: () => import(/* webpackChunkName: "ToolList" */ '../page/tools/tool_list.vue')
   },
   {
     path: '/tools/:tag/:software',
     name: 'ToolShow',
-    component: () => import(/* webpackChunkName: "Home" */ '../page/tools/tool_show.vue')
+    component: () => import(/* webpackChunkName: "ToolShow" */ '../page/tools/tool_show.vue')
   },
   {
     path: '/my/missions',

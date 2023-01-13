@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 // eleme 组件
 import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
+// import 'element-plus/dist/index.css'  // 不用加载了，在 vue.config.js 中使用CDN方式加载
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { IconPark } from '@/api/icon-park.js'
 import '@icon-park/vue-next/styles/index.css'
