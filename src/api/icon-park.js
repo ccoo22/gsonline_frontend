@@ -8,4 +8,5 @@ export function IconPark (app) {
   app.component('icon-list', List)
   app.component('icon-consume', Consume)
   app.component('icon-info', Info)
+
 }

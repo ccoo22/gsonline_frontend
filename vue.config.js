@@ -13,15 +13,21 @@ const CDN = {
   js: [
     'https://unpkg.com/vue@3.2.45/dist/vue.global.js',
     'https://unpkg.com/element-plus@2.2.21/dist/index.full.js',
-	'https://unpkg.com/@element-plus/icons-vue@2.0.10/dist/index.iife.min.js'
+	'https://unpkg.com/@element-plus/icons-vue@2.0.10/dist/index.iife.min.js',
+	'https://unpkg.com/axios@1.1.3/dist/axios.min.js',
+	'https://unpkg.com/vue-router@4.0.3/dist/vue-router.global.js',
+	'https://unpkg.com/vuex@4.0.0/dist/vuex.global.js',
   ]
 };
 
 // 生产环节不编译的模块
 let objExternals = {
-  vue: 'Vue',
+  'vue': 'Vue',
+  'vuex': 'Vuex',
+  'vue-router': 'VueRouter',
+  'axios': 'axios',
   'element-plus': 'ElementPlus',
-  '@element-plus/icons-vue': 'ElementPlusIconsVue'
+  '@element-plus/icons-vue': 'ElementPlusIconsVue', 
 }
  
 module.exports = defineConfig({
@@ -46,16 +52,19 @@ module.exports = defineConfig({
                   })
               )
 			  // 因为使用了CDN, 这里要排除一些需要编译的模块
-			  config.externals = objExternals
+			  // config.externals = objExternals
           }
       },
 	chainWebpack: config => {
 	  	// 配置，将当前页定义的cdn值传到主页面（index.html）
-	    config.plugin('html').tap(args => {
-	    // 这里我是除本地环境，其余均使用CDN，可自己选择是否配置
-	      args[0].cdn = process.env.VUE_APP_STAGE === 'LOCAL' ? {} : CDN
-	      return args;
-	    });
+		// if (isProduction) {
+		// 	config.plugin('html').tap(args => {
+		// 	// 这里我是除本地环境，其余均使用CDN，可自己选择是否配置
+		// 	  args[0].cdn = process.env.VUE_APP_STAGE === 'LOCAL' ? {} : CDN
+		// 	  return args;
+		// 	});
+		// }
+	    
 	  } 
 })
 

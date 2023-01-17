@@ -49,12 +49,23 @@
 								
 							</el-sub-menu>
 						</div>
+						
+						<div @click="help_and_feedback">
+							<li class='el-menu-item'>
+								<el-icon><QuestionFilled /></el-icon>
+								<span>求助与反馈</span>
+							</li>
+						</div>
 					</el-menu>
+					
 				</el-aside>
 				<!-- 右侧内容展示区 -->
 				<el-main id="my-show-content" :style="defaultHeight">
 					<router-view></router-view>
 				</el-main>
+				
+				<!-- help dialog -->
+				<HelpDialog v-model:show='help_dialog'/>
 			</el-container>
 		</el-container>
 	</div>
@@ -78,6 +89,7 @@
 		useRoute, useRouter
 	} from 'vue-router'
 	import {ElMessageBox, ElMessage} from 'element-plus'
+	import HelpDialog from '@/components/HelpDialog.vue'
 
 	export default {
 		components: {
@@ -85,7 +97,8 @@
 			Files,
 			Picture,
 			Cpu,
-			Avatar
+			Avatar,
+			HelpDialog
 		},
 		setup() {
 			const route = useRoute()
@@ -146,7 +159,7 @@
 							is_active: false,
 						},
 					]
-				},
+				}
 			])
 			
 			// 面包屑导航设计
@@ -165,7 +178,7 @@
 				username.value = localStorage.getItem('username')
 			}
 			
-			// 监视路由变动，及时修正顶部导航（主要应对初次登陆成功时的刷新）
+			// 监视路由变动，及时修正顶部导航（主要应对初次登陆成功时的刷新高亮menu）
 			watch(() => route.path, (path_new, path_old) => {
 				is_login.value = false
 				username.value = ''
@@ -182,15 +195,11 @@
 				}else{
 					default_active_menu.value = '/' + router_splits[1] + '/' + router_splits[2]
 				}
-				
 			})
-			
-
-
 			
 			const select_menu = (index, indexPath) =>{
 				// 主页，这里也要设置默认激活标签。如果不添加的话，el-menu 会触发自动跳转 router，估计是bug
-				default_active_menu.value = index
+				// 求助反馈页面，收集客户的反馈
 				router.push(index)
 			}
 			
@@ -213,7 +222,22 @@
 			// main 高度设置(顶部导航占用了 60)
 			const defaultHeight = reactive({height: window.innerHeight - 60 + 'px'})
 			 
-			 
+			
+			// help 反馈对话框
+			const help_dialog = ref(false)
+			const help_and_feedback = function(){
+				const token = localStorage.getItem('token')
+				if(token){
+					help_dialog.value = true
+				}else{
+					ElMessageBox.confirm("需要登陆", '警告', {confirmButtonText: '登陆',cancelButtonText: '取消',type: 'warning'}).then(() => {
+						router.push({ name: 'login'})
+					}).catch(()=>{
+					// 取消
+					})
+				}
+			}
+			
 			// 导出
 			return {
 				left_nav_list,
@@ -223,7 +247,9 @@
 				defaultHeight,
 				default_active_menu,
 				select_menu,
-				breadcrumb_nav
+				breadcrumb_nav,
+				help_dialog,
+				help_and_feedback
 			}
 		}
 	}
@@ -271,5 +297,6 @@
 	#breadcrumb-nav{
 		margin-bottom: 10px;
 	}
+ 
  
 </style>
