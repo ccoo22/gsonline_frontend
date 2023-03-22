@@ -466,7 +466,12 @@
 									
 									// 跳转到结果页面
 									ElMessageBox.confirm("任务提交完毕，是否查看结果? <br>也可以在 '我的' -> '任务' 中查看<br>另外，当分析完成时，我们也将通过您注册的邮件发送通知", '通知', {confirmButtonText: '查看结果', cancelButtonText: '留在当前页面', type: 'success', dangerouslyUseHTMLString: true,}).then(() => {
-										router.push({ name: 'MyResult', params: {'mission_id': res.data.mission_id} })
+										
+										let routeData = router.resolve({
+										        name: 'MyResult',
+										        params: {'mission_id': res.data.mission_id}
+										    })
+										window.open(routeData.href, '_blank')
 									}).catch(()=>{
 										// 取消
 									})

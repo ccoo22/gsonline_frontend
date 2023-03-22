@@ -7,7 +7,7 @@
 		</template>
 	    <el-descriptions-item label="任务id" >{{result.mission_id}}</el-descriptions-item>
 	    <el-descriptions-item label="任务名" >{{result.mission_name}}</el-descriptions-item>
-	    <el-descriptions-item label="软件" >  <router-link :to="'/tools/all/' + result.software"> <el-tag  round >{{result.software}}</el-tag> </router-link></el-descriptions-item>
+	    <el-descriptions-item label="软件" >  <router-link :to="'/tools/all/' + result.software" target="_blank"> <el-tag  round >{{result.software}}</el-tag> </router-link></el-descriptions-item>
 	    <el-descriptions-item label="运行状态" >
 			  <el-steps :active="result_status.active" finish-status='success'>
 			    <el-step title="接收"  :description="result.date_created" />

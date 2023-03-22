@@ -3,7 +3,8 @@
 		<el-container style="height: 100%;">
 			<!-- 顶部导航 -->
 			<el-header class="top-nav">
-				<div class="title">天昊云</div>
+				<!-- <div class="title">天昊云</div> -->
+				<el-image  :src="logo_img" fit="contain" />
 				<div class="login">
 					<div v-if="is_login == false">
 						<router-link to="/register">注册</router-link>
@@ -90,7 +91,7 @@
 	} from 'vue-router'
 	import {ElMessageBox, ElMessage} from 'element-plus'
 	import HelpDialog from '@/components/HelpDialog.vue'
-
+	const logo_img = require('@/assets/logo.png')
 	export default {
 		components: {
 			HomeFilled,
@@ -104,13 +105,14 @@
 			const route = useRoute()
 			const router = useRouter()
 			// 左侧导航栏列表
-			const left_nav_list = reactive([{
-					id: '1',
-					title: '首页',
-					router: '/home',
-					icon: 'HomeFilled',
-					is_active: false
-				},
+			const left_nav_list = reactive([
+				// {
+				// 	id: '1', 
+				// 	title: '首页',
+				// 	router: '/home',
+				// 	icon: 'HomeFilled',
+				// 	is_active: false
+				// },
 				{
 					id: '2',
 					title: '全部',
@@ -134,25 +136,32 @@
 				},
 				{
 					id: '5',
+					title: '流程',
+					router: '/tools/pipeline',
+					icon: 'Orange',
+					is_active: false
+				},
+				{
+					id: '6',
 					title: '我的',
 					router: '/my',
 					icon: 'Avatar',
 					is_active: false,
 					sub:[
 						{
-							id: '5-1',
+							id: '6-1',
 							title: '任务',
 							router:'/my/missions',
 							icon: 'icon-list',
 							is_active: false,
 						},{
-							id: '5-2',
+							id: '6-2',
 							title: '消费记录',
 							router:'/my/expenses',
 							icon: 'icon-consume',
 							is_active: false,
 						},{
-							id: '5-3',
+							id: '6-3',
 							title: '个人信息',
 							router:'/my/info',
 							icon: 'icon-info',
@@ -238,6 +247,7 @@
 				}
 			}
 			
+			
 			// 导出
 			return {
 				left_nav_list,
@@ -249,7 +259,8 @@
 				select_menu,
 				breadcrumb_nav,
 				help_dialog,
-				help_and_feedback
+				help_and_feedback,
+				logo_img
 			}
 		}
 	}

@@ -44,7 +44,7 @@
 					</el-table-column>
 					<el-table-column prop="software" label="软件"  sortable >
 						<template #default="scope">
-					         <router-link :to="'/tools/all/' + scope.row.software"> <el-tag  round >{{scope.row.software}}</el-tag> </router-link>
+					         <router-link :to="'/tools/all/' + scope.row.software" target="_blank"> <el-tag  round >{{scope.row.software}}</el-tag> </router-link>
 					    </template>
 					</el-table-column>
 					<el-table-column prop="status" label="运行状态"   sortable :filters='filter_status' :filter-method="filter_status_fun">
@@ -161,7 +161,11 @@
 			
 			// 跳转到任务详情页
 			const show_mission = (mission_id) => {
-				router.push({ name: 'MyResult', params:{'mission_id': mission_id}})
+				let routeData = router.resolve({
+				        name: 'MyResult',
+				        params: {'mission_id': mission_id}
+				    })
+				window.open(routeData.href, '_blank')
 			}
 			
 			// 删除任务

@@ -143,7 +143,6 @@
 					}
 					
 				}
-				console.log(softwares)
 				
 			}
 			// 挂载、监听路由

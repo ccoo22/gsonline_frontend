@@ -4,7 +4,7 @@ import {ElMessageBox, ElLoading} from 'element-plus'
 
 // 创建通用 axios 配置
 let instance = axios.create({
-	baseURL: 'http://lab.geneskybiotech.com:8082',  // 后端地址
+	baseURL: 'http://cloud.geneskybiotech.com:8082',  // 后端地址
 	responseType: "json",
 	headers:{'Content-Type': 'application/json'}
 })
@@ -19,7 +19,7 @@ instance.interceptors.request.use(
 			loading.close()
 			loading = null
 		}
-		loading = ElLoading.service({text: '加载中', background: 'rgba(0, 0, 0, 0.5)', lock: false, fullscreen: false, target:"#my-show-content"})
+		loading = ElLoading.service({text: '加载中', background: 'rgba(0, 0, 0, 0.05)', lock: false, fullscreen: false, target:"#my-show-content"})
 		let token = localStorage.getItem('token')
 		if(token){
 			config.headers.Authorization = token

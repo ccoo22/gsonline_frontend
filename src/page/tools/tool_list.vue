@@ -48,7 +48,9 @@
 										<span title="消耗金币">
 											<el-icon><Coin /></el-icon>&nbsp;{{item.price}}
 										</span> 
-										
+									</div>
+									<div v-if="item.is_active == false" class='online'>
+										未上线
 									</div>
 								</div>
 							</div>
@@ -124,9 +126,7 @@
 						softwares.length = 0
 						softwares.push(...res.data.data)
 					}
-					
 				}
-				
 			}
 			// 挂载、监听路由
 			onMounted(() => {
@@ -291,6 +291,10 @@
 		justify-content: space-between;
 		.coin{
 			color: gold;
+		}
+		.online{
+			font-weight: bold;
+			color: red;
 		}
 	}
 	
