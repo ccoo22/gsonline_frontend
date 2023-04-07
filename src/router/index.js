@@ -4,7 +4,7 @@ const routes = [
   {
     path: '/',
     name: 'root',
-    redirect: { name: 'home' } 
+    redirect: { name: 'ToolList', params: { tag: 'all' }  } 
   },
   {
     path: '/home',

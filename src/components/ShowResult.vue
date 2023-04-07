@@ -24,7 +24,7 @@
 						<el-tag class="ml-2" type="success" size='large'  effect='light' round>{{ item_img.name }}</el-tag>
 						<br>
 						<!-- png/jpeg图 -->
-						<el-image style="height: 500px" :src="item_img.file" fit="contain" :preview-src-list="[item_img.file]" hide-on-click-modal v-if="item_img.file_type !== 'pdf'" />
+						<el-image style="height: 500px" :src="item_img.file" fit="contain" :preview-src-list="[item_img.file]" hide-on-click-modal v-if="item_img.file_type !== 'pdf'" :preview-teleported='true'/>
 					</div>
 				</el-tab-pane>
 				

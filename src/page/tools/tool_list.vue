@@ -44,10 +44,13 @@
 											<icon-link-cloud />&nbsp;{{item.run}}
 										</span>
 									</div>
-									<div class='coin'>
+									<div v-if="item.price > 0" class='coin'>
 										<span title="消耗金币">
 											<el-icon><Coin /></el-icon>&nbsp;{{item.price}}
 										</span> 
+									</div>
+									<div v-else>
+										<el-tag class="ml-2" type="success" effect="dark" >免费</el-tag>
 									</div>
 									<div v-if="item.is_active == false" class='online'>
 										未上线

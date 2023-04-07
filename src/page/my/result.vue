@@ -1,6 +1,5 @@
 <template>
 	<el-descriptions title="任务描述" :column='3' border size='default'>
-		
 		<!-- 刷新按钮 -->
 		<template #extra>
 			<el-button type="primary" @click="router.go(0)">刷新页面</el-button>
@@ -18,7 +17,9 @@
 		<el-descriptions-item label="用户" >{{result.username}}</el-descriptions-item>
 	</el-descriptions>
 	
-	<div class='el-descriptions__title my-title'>分析结果</div>
+	<div class='el-descriptions__title my-title'>分析结果 <el-tag class="ml-2" type="danger">注意：结果最多保存 7 天，请及时下载</el-tag></div>
+			
+	
 	<ShowResult :result="result"></ShowResult>
 </template>
 
@@ -46,13 +47,17 @@
 			// 当前的结果id
 			onMounted(() =>{
 				mission_id.value = route.params.mission_id
+				console.log('onMounted')
 				get_result()
 			})
-			// watch(()=>route.path, (path_new, path_old)=>{
-			// 	mission_id.value = route.params.mission_id
-			// 	console.log('result watch')
-			// 	get_result()
-			// })
+			watch(()=>route.path, (path_new, path_old)=>{
+				mission_id.value = route.params.mission_id
+				if(path_new.search('missions') > 0){
+					// 当跳转的新页面也是 missions结果，才会执行结果获取
+					get_result()
+				}
+				
+			})
 			
 			// 获取结果
 			async function get_result(){

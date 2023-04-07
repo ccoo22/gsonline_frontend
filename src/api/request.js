@@ -4,7 +4,8 @@ import {ElMessageBox, ElLoading} from 'element-plus'
 
 // 创建通用 axios 配置
 let instance = axios.create({
-	baseURL: 'http://cloud.geneskybiotech.com:8082',  // 后端地址
+	baseURL: 'http://192.168.0.13:8000',  // 后端地址
+	// baseURL: 'http://cloud.geneskybiotech.com:8082',  // 后端地址
 	responseType: "json",
 	headers:{'Content-Type': 'application/json'}
 })

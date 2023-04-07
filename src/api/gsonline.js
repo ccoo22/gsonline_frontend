@@ -33,7 +33,7 @@ export function form_pack(ui, form_model){
 	ui.forEach((item, index)=>{
 		// 参数名称
 		const param_name = item['name']
-		if(item['type'] !== 'placeholder'){
+		if(item['type'] !== 'placeholder' && item['type'] !== 'divider'){
 			if(item['type'] === 'upload'){
 				// 文件打包
 				if(form_model[param_name].length > 0){

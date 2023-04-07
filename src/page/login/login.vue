@@ -80,7 +80,7 @@
 								localStorage.setItem('token', res.data.token)
 								localStorage.setItem('username', my_form_model.username)
 								my_form_model.login_status = ""
-								router.push({ name: 'home'})
+								router.push({ name: 'ToolList', params: { tag: 'all' }})
 							}else{
 								// 登陆失败
 								my_form_model.login_status = "用户名或密码错误!"

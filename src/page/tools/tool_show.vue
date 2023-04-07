@@ -126,8 +126,9 @@
 								       v-for="(opt, opt_index) in item.options"
 								       :key="opt"
 								       :value="opt"
+									   :label="item.options_label[opt_index]"
 								     >
-										<div v-html="item.options_label[opt_index]"></div>
+										<div v-html="item.options_label_html[opt_index]"></div>
 									 </el-option>
 								   </el-select>
 							</el-form-item>
@@ -149,8 +150,9 @@
 								       v-for="(opt, opt_index) in item.options"
 								       :key="opt"
 								       :value="opt"
+									   :label="item.options_label[opt_index]"
 								     >
-										<div v-html="item.options_label[opt_index]"></div>
+										<div v-html="item.options_label_html[opt_index]"></div>
 									 </el-option>
 								   </el-select>
 							</el-form-item>
@@ -292,12 +294,14 @@
 					    </el-progress>
 				</div>
 				<div class='cost'>
-					<div class='gold'>
+					<div v-if="software_details.price > 0" class='gold'>
 						<span title="消耗金币">
 							<el-icon><Coin /></el-icon>&nbsp;{{software_details.price}}
 						</span> 
 					</div>
-					
+					<div v-else>
+						<el-tag class="ml-2" type="success" effect="dark">免费</el-tag>
+					</div>
 				</div>
 				<!-- 上传按钮 -->
 				<div class='button'>
@@ -331,7 +335,7 @@
 			    <el-tab-pane label="示例图" name="pic">
 					<el-card shadow="never" class="usage">
 						<div style="width: 1000px"></div>
-					    <el-image :src="software_details.demo_img"  :preview-src-list='[software_details.demo_img]' :hide-on-click-modal='true' fit='contain' />
+					    <el-image :src="software_details.demo_img"  :preview-src-list='[software_details.demo_img]' :hide-on-click-modal='true' fit='contain' :preview-teleported='true' />
 					</el-card>
 				</el-tab-pane>
 				
