@@ -98,6 +98,9 @@
 			</el-card>
 		</el-col>
 	</el-row>
+	
+	<!-- <el-button color="#247585" @click="get_example_data('otu')">示例&nbsp;<icon-download-one size="18" fill="#fff"/></el-button> -->
+
 </template>
 
 <script>
@@ -168,6 +171,8 @@
 				type: 'primary',
 			  },
 			]
+
+			
 			return {softwares, bigevents}
 			
 		}

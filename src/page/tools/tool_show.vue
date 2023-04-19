@@ -33,7 +33,7 @@
 						<el-col :span="8" >
 						</el-col>
 						
-						<el-col :span="item.span" :offset="item.offset" v-for="(item, index) in software_details.ui" :key='index'>
+						<el-col :span="item.span" :offset="item.offset" :pull="item.pull" v-for="(item, index) in software_details.ui" :key='index'>
 				
 							
 							<!-- upload 文件输入 -->
@@ -59,6 +59,7 @@
 									:limit="item.limit"
 									:auto-upload="false"
 									:show-file-list="true"
+									:accept="item.accept"
 								>
 									<el-button type="primary">{{item.placeholder}}</el-button>
 								</el-upload>
@@ -121,12 +122,13 @@
 									  <span>{{item.label}}</span>
 									</el-tooltip>
 								</template>
-								   <el-select v-model="my_form_model[item.name]" :placeholder="item.placeholder" :multiple='false'>
+								   <el-select v-model="my_form_model[item.name]" :placeholder="item.placeholder" :multiple='false' >
 								     <el-option
 								       v-for="(opt, opt_index) in item.options"
 								       :key="opt"
 								       :value="opt"
 									   :label="item.options_label[opt_index]"
+									   
 								     >
 										<div v-html="item.options_label_html[opt_index]"></div>
 									 </el-option>
@@ -276,6 +278,11 @@
 							<el-divider :border-style="item.border_style" :content-position='item.content_position' v-if="item.type === 'divider'"> 
 							<div v-html="item.desc"></div>
 							</el-divider>
+							
+							<!-- 下载示例 -->
+							<el-button color="#247585" @click="get_example_data(item.name)" v-if="item.type === 'download_demo_file'">
+								示例&nbsp; <icon-download-one size="18" fill="#fff"/>
+							</el-button>
 				 
 				
 						</el-col>
@@ -376,7 +383,8 @@
 			// 软件
 			const software_name = ref('')
 			const software_details = reactive({})
-			const software_helps = computed(() => software_details.ui.filter((item) => item['type'] !== 'placeholder' && item['type'] !== 'divider') )
+			const skip_types = ['placeholder', 'divider', 'download_demo_file']
+			const software_helps = computed(() => software_details.ui.filter((item) => !skip_types.includes(item['type'])) )
 			// 表单对象
 			const my_form = ref('')
 			// 表单参数
@@ -390,9 +398,12 @@
 						Object.assign(software_details, res.data.data)
 						// 添加表单参数
 						software_details.ui.forEach((item, index)=>{
-							if(item['type'] !== 'placeholder' && item['type'] !== 'divider'){
+							if(!skip_types.includes(item['type'])){
 								if('default' in item){
 									my_form_model[item.name] = item.default
+									// if(item['type'] == 'input-number' && typeof item.default !== 'number'){
+									// 	my_form_model[item.name] = NaN
+									// }
 								}else{
 									if(item.type === 'upload'){
 										my_form_model[item.name] = []
@@ -451,7 +462,7 @@
 							ElMessage({type: 'warning', message: '数据上传中，请耐心等待，不要关闭窗口'})
 							  
 							// 数据打包
-							var formData = form_pack(software_details.ui, my_form_model)
+							var formData = form_pack(software_details.ui, my_form_model, skip_types)
 							formData.append('mission_name', my_form_model.mission_name)  // 任务名
 							formData.append('software', software_name.value)  // 软件
 							formData.append('version', software_details.version)  // 软件版本
@@ -494,9 +505,53 @@
 						}
 					})
 				}
-				
-				
 			}
+			
+			// 示例文件下载函数
+			async function get_example_data(file_name) {
+				const res = await proxy.$my_request.get('/api/demo_file/' + file_name)
+				if(res.status === 200){
+					if(res.data.status == 0){
+						var url = res.data.data.demo_file
+						var name = url.substr(url.lastIndexOf("/") + 1);
+						fileAjax(url, function(xhr) {
+						    downloadFile(xhr.response, name)
+						}, {
+						    responseType: 'blob'
+						})
+					}else{
+						ElMessage({type: 'error', message: '示例数据丢失'})
+					}
+				}
+			}
+			
+			function fileAjax(url, callback, options) {
+			    let xhr = new XMLHttpRequest()
+			    xhr.open('get', url, true)
+			    if (options.responseType) {
+			        xhr.responseType = options.responseType
+			    }
+			    xhr.onreadystatechange = function() {
+			        if (xhr.readyState === 4 && xhr.status === 200) {
+			            callback(xhr)
+			        }
+			    }
+			    xhr.send()
+			}
+			
+			function downloadFile(content, filename) {
+			    window.URL = window.URL || window.webkitURL
+			    let a = document.createElement('a')
+			    let blob = new Blob([content])
+			// 通过二进制文件创建url
+			    let url = window.URL.createObjectURL(blob)
+			    a.href = url
+			    a.download = filename
+			    a.click()
+			// 销毁创建的url
+			    window.URL.revokeObjectURL(url)
+			}
+			
 			
 			// usage 页面高度定义
 			const usageHeight = reactive({'max-height': window.innerHeight - 60 - 20 - 24 + 'px'})
@@ -504,7 +559,7 @@
 			const contentHeight = ref(window.innerHeight - 60 - 20 - 24 - 100 + 'px')
 			// tab 默认
 			const usage_activeName = ref('usage')
-			return {my_form, my_form_model, my_form_rules, software_details, software_helps, btn_status, btn_start_run, upLoadProgress, usageHeight, contentHeight, usage_activeName}
+			return {my_form, my_form_model, my_form_rules, software_details, software_helps, btn_status, btn_start_run, upLoadProgress, usageHeight, contentHeight, usage_activeName, get_example_data}
 		}
 	}
 </script>

@@ -27,13 +27,13 @@ export function form_value_and_rules_initialization(ui){
 }
 
 // 表单数据打包
-export function form_pack(ui, form_model){
+export function form_pack(ui, form_model, skip_types){
 	// 打包数据
 	var formData = new FormData()
 	ui.forEach((item, index)=>{
 		// 参数名称
 		const param_name = item['name']
-		if(item['type'] !== 'placeholder' && item['type'] !== 'divider'){
+		if(!skip_types.includes(item['type'])){
 			if(item['type'] === 'upload'){
 				// 文件打包
 				if(form_model[param_name].length > 0){

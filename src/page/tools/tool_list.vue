@@ -128,6 +128,8 @@
 						// 绑定给 reactive
 						softwares.length = 0
 						softwares.push(...res.data.data)
+						// 排序
+						sortSoftwares(order.value)
 					}
 				}
 			}
@@ -177,10 +179,14 @@
 			if(order_last){
 				order.value = order_last
 			} 
-			// 排序事件激活
+			// 排序事件watch激活
 			watch(order, (new_val, old_val) => {
 				localStorage.setItem('order', new_val)
-				switch(new_val){
+				sortSoftwares(new_val)
+			})
+			// 工具排序
+			function sortSoftwares(val){
+				switch(val){
 					case 'id':
 						softwares.sort(sortBy('id',1))
 						break
@@ -200,8 +206,7 @@
 						softwares.sort(sortBy('date_last_modified', -1))
 						break
 				}
-				
-			})
+			}
 			
 			//attr：根据该属性排序；rev：升序1或降序-1，不填则默认为1
 			function sortBy(attr,rev){
