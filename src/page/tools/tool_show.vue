@@ -280,7 +280,7 @@
 							</el-divider>
 							
 							<!-- 下载示例 -->
-							<el-button color="#247585" @click="get_example_data(item.name)" v-if="item.type === 'download_demo_file'">
+							<el-button color="#247585" @click="get_example_data(item.name, item.save_name)" v-if="item.type === 'download_demo_file'">
 								示例&nbsp; <icon-download-one size="18" fill="#fff"/>
 							</el-button>
 				 
@@ -508,14 +508,14 @@
 			}
 			
 			// 示例文件下载函数
-			async function get_example_data(file_name) {
+			async function get_example_data(file_name, save_name) {
 				const res = await proxy.$my_request.get('/api/demo_file/' + file_name)
 				if(res.status === 200){
 					if(res.data.status == 0){
 						var url = res.data.data.demo_file
-						var name = url.substr(url.lastIndexOf("/") + 1);
+						// var save_name = url.substr(url.lastIndexOf("/") + 1);  // 使用原始文件名作为保存的名称
 						fileAjax(url, function(xhr) {
-						    downloadFile(xhr.response, name)
+						    downloadFile(xhr.response, save_name)
 						}, {
 						    responseType: 'blob'
 						})
