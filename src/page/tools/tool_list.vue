@@ -84,6 +84,7 @@
 	import {
 		useRoute
 	} from 'vue-router'
+ import {ElMessage } from 'element-plus'
 	import {
 		watch,
 		ref,
@@ -130,6 +131,8 @@
 						softwares.push(...res.data.data)
 						// 排序
 						sortSoftwares(order.value)
+					}else{
+						ElMessage({type: 'error', message: res.data.msg})
 					}
 				}
 			}

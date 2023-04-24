@@ -14,7 +14,7 @@
 <script>
 	import {watch, onMounted, getCurrentInstance, reactive} from 'vue'
 	import {useRoute, useRouter} from 'vue-router'
-	import {ElMessageBox,  } from 'element-plus'
+	import {ElMessageBox,  ElMessage} from 'element-plus'
 	
 	export default{
 		setup(){
@@ -42,6 +42,8 @@
 						if(res.data.status == 0){
 							Object.assign(info, res.data.data)
 							
+						}else{
+							ElMessage({type: 'error', message: res.data.msg})
 						}
 					}
 				}

@@ -59,7 +59,8 @@
 						if(res.data.status == 0){
 							expenses.length = 0
 							expenses.push(...res.data.data)
-							
+						}else{
+							ElMessage({type: 'error', message: res.data.msg})
 						}
 					}
 				}

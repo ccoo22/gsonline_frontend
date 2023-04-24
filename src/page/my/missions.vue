@@ -111,6 +111,8 @@
 						if(res.data.status == 0){
 							missions.length = 0
 							missions.push(...res.data.data)
+						}else{
+							ElMessage({type: 'error', message: res.data.msg})
 						}
 					}
 				}

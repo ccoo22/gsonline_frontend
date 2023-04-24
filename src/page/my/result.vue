@@ -47,7 +47,6 @@
 			// 当前的结果id
 			onMounted(() =>{
 				mission_id.value = route.params.mission_id
-				console.log('onMounted')
 				get_result()
 			})
 			watch(()=>route.path, (path_new, path_old)=>{
