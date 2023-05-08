@@ -122,6 +122,8 @@
 			
 			// 当前的工具名称
 			onMounted(() =>{
+				// 修改网页标题
+				document.title = "任务列表"
 				get_missions()
 			})
 			// watch(()=>route.path, (path_new, path_old)=>{

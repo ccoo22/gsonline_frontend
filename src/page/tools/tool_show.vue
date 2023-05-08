@@ -396,6 +396,8 @@
 				if(res.status === 200){
 					if(res.data.status == 0){
 						Object.assign(software_details, res.data.data)
+						// 修改网页标题
+						document.title = software_details.name
 						// 添加表单参数
 						software_details.ui.forEach((item, index)=>{
 							if(!skip_types.includes(item['type'])){

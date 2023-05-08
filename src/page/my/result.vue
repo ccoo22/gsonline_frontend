@@ -72,6 +72,8 @@
 					if(res.status === 200){
 						if(res.data.status == 0){
 							Object.assign(result, res.data.data)
+							// 修改网页标题
+							document.title = "结果查看 " + result.mission_name
 						}else{ 
 							ElMessage({type: 'error', duration: 5000, message: res.data.msg })
 						}

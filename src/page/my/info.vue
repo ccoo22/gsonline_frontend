@@ -53,6 +53,8 @@
 			
 			// 当前的工具名称
 			onMounted(() =>{
+				// 修改网页标题
+				document.title = "个人信息"
 				get_info()
 			})
 			// watch(()=>route.path, (path_new, path_old)=>{

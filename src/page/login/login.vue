@@ -90,6 +90,8 @@
 				})
 			
 			}
+			// 修改网页标题
+			document.title = "用户登陆"
 			
 			// 直接进入当前页面，先判断是否已经登陆，否则不允许进入
 			const token = localStorage.getItem('token')

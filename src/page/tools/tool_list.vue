@@ -1,6 +1,6 @@
 <template>
 	<el-container style=" height: 100%;">
-		<el-header height='20px' class="header">
+		<el-header height='40px' class="header">
 			<div class='title'>
 				<div class="order" > 
 				
@@ -19,7 +19,7 @@
 		<el-main>
 			<el-row>
 				<el-col :span="span_per_item" v-for="(item, index) in filterSoftwares" :key="item.id">
-					<router-link :to="item.router">
+					<router-link :to="item.router" target="_blank">
 						<el-card :body-style="{ padding: '0px'}" shadow="always">
 							<template #header>
 								<div class="img-container">
@@ -139,11 +139,15 @@
 			// 挂载、监听路由
 			onMounted(() => {
 				tag.value = route.params.tag
+				// 修改网页标题
+				document.title = "类别 " + tag.value
 				get_softwares()
 			})
 			// all/plot/statistic 三个路由之间切换时，不会触发挂载事件（因为他们调用了同一个vue），只会触发watch，因此，这里也要添加数据更新
 			watch(() => route.path, (path_new, path_old) => {
 				tag.value = route.params.tag
+				// 修改网页标题
+				document.title = "类别 " + tag.value
 				// 去掉排序标签、默认排序
 				localStorage.removeItem('order')
 				order.value= 'id'
@@ -222,6 +226,9 @@
 			        return 0;
 			    }
 			}
+			
+
+			
 			return {
 				filterSoftwares,
 				span_per_item,
@@ -265,12 +272,16 @@
 		position: absolute;
 		max-width: 100%;
 		max-height: 100%;
+		margin: 2px auto;
+		left: 0;
+		right: 0;
 	}
 
 	// 卡片头部边距初始化
 	:deep(.el-card__header)  {
 		margin: 0;
 		padding: 0;
+		z-index: 1000;
 	}
 
 	// 软件名称
@@ -278,6 +289,9 @@
 		color: var(--el-text-color-primary);
 		font-size: 1em;
 		margin-bottom: 0.5em;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	// 描述字符
@@ -294,7 +308,7 @@
 	// 浏览数、使用数
 	.view-run-info {
 		color: var(--el-text-color-placeholder);
-		font-size: 1em;
+		font-size: 0.8em;
 	}
 	
 	.bottom{
