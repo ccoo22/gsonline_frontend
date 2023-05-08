@@ -140,14 +140,14 @@
 			onMounted(() => {
 				tag.value = route.params.tag
 				// 修改网页标题
-				document.title = "类别 " + tag.value
+				document.title = "天昊云 " + tag.value
 				get_softwares()
 			})
 			// all/plot/statistic 三个路由之间切换时，不会触发挂载事件（因为他们调用了同一个vue），只会触发watch，因此，这里也要添加数据更新
 			watch(() => route.path, (path_new, path_old) => {
 				tag.value = route.params.tag
 				// 修改网页标题
-				document.title = "类别 " + tag.value
+				document.title = "天昊云 " + tag.value
 				// 去掉排序标签、默认排序
 				localStorage.removeItem('order')
 				order.value= 'id'
