@@ -5,6 +5,7 @@
 			<el-header class="top-nav">
 				<!-- <div class="title">天昊云</div> -->
 				<el-image  :src="logo_img" fit="contain" />
+
 				<div class="login">
 					<div v-if="is_login == false">
 						<router-link to="/register">注册</router-link>
@@ -143,25 +144,53 @@
 				},
 				{
 					id: '6',
+					title: '其他分类',
+					router: '/tools',
+					icon: 'icon-more-four',
+					is_active: false,
+					sub:[
+						{
+							id: '6-1',
+							title: '转录组',
+							router:'/tools/rna',
+							icon: 'Tools',
+							is_active: false,
+						},{
+							id: '6-2',
+							title: '微生物',
+							router:'/tools/microbe',
+							icon: 'Tools',
+							is_active: false,
+						},{
+							id: '6-3',
+							title: '降维',
+							router:'/tools/dimensional_reduction',
+							icon: 'Tools',
+							is_active: false,
+						},
+					]
+				},
+				{
+					id: '7',
 					title: '我的',
 					router: '/my',
 					icon: 'Avatar',
 					is_active: false,
 					sub:[
 						{
-							id: '6-1',
+							id: '7-1',
 							title: '任务',
 							router:'/my/missions',
 							icon: 'icon-list',
 							is_active: false,
 						},{
-							id: '6-2',
+							id: '7-2',
 							title: '消费记录',
 							router:'/my/expenses',
 							icon: 'icon-consume',
 							is_active: false,
 						},{
-							id: '6-3',
+							id: '7-3',
 							title: '个人信息',
 							router:'/my/info',
 							icon: 'icon-info',

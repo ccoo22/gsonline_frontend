@@ -10,7 +10,7 @@
 				      <el-radio-button label="view" size="default">浏览量<el-icon><Bottom /></el-icon></el-radio-button>
 				      <el-radio-button label="run" size="default">运行量<el-icon><Bottom /></el-icon></el-radio-button>
 				      <el-radio-button label="date_created" size="default">发布日期<el-icon><Bottom /></el-icon></el-radio-button>
-				      <el-radio-button label="date_last_modified" size="default">最近更新<el-icon><Bottom /></el-icon></el-radio-button>
+				      <el-radio-button label="date_update" size="default">最近更新<el-icon><Bottom /></el-icon></el-radio-button>
 					</el-radio-group>
 				</div>
 				<div><el-input v-model="search" size="default"  style="width: 200px" placeholder="搜索" clearable  /> </div> 
@@ -209,8 +209,8 @@
 					case 'date_created':
 						softwares.sort(sortBy('date_created', -1))
 						break
-					case 'date_last_modified':
-						softwares.sort(sortBy('date_last_modified', -1))
+					case 'date_update':
+						softwares.sort(sortBy('date_update', -1))
 						break
 				}
 			}
@@ -287,6 +287,7 @@
 	// 软件名称
 	.software-name {
 		color: var(--el-text-color-primary);
+		font-weight: bold;
 		font-size: 1em;
 		margin-bottom: 0.5em;
 		white-space: nowrap;
@@ -296,8 +297,8 @@
 
 	// 描述字符
 	.software-description {
-		color: var(--el-text-color-regular);
-		font-size: 0.7em;
+		// color: var(--el-text-color-regular);
+		font-size: 0.5em;
 		width: 100%;
 		white-space: nowrap;
 		overflow: hidden;
@@ -307,8 +308,8 @@
 
 	// 浏览数、使用数
 	.view-run-info {
-		color: var(--el-text-color-placeholder);
-		font-size: 0.8em;
+		// color: var(--el-text-color-placeholder);
+		font-size: 0.5em;
 	}
 	
 	.bottom{

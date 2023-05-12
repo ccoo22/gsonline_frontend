@@ -29,11 +29,12 @@
 		
 		<el-button class='register-button' type="primary" @click="btn_register(my_form)">注册</el-button>   
 		<div class='login'><router-link to="/login">登陆</router-link>  <div class='error'> {{my_form_model.register_status}}</div> </div> 
+		<div class='login'><router-link to="/resend_active_token">未收到账号激活码？</router-link> </div>
 	</div>
 </template>
 
 <script>
-	import {ref, reactive, getCurrentInstance} from 'vue'
+	import {ref, onUnmounted, reactive, getCurrentInstance} from 'vue'
 	import {
 		useRouter, useRoute
 	} from 'vue-router'
@@ -56,7 +57,12 @@
 			} = getCurrentInstance()
 			const router = useRouter()
 			const route = useRoute()
-			
+			// 直接进入当前页面，先判断是否已经登陆，否则不允许进入
+			const token = localStorage.getItem('token')
+			if(token){
+				ElMessage({type: 'warning', message: '您已登陆'})
+				router.go(-1)
+			}
 			
 			// 用户名、密码
 			const my_form = ref('')
@@ -106,9 +112,12 @@
 						if(res.status === 200){
 							// 注册成功，存储token,跳转到首页/刷新
 							if(res.data.status === 0){
-								ElMessage({type: 'success', message: '注册成功'})
+								ElMessageBox.alert('注册成功，账户需要激活才可使用。激活链接已发送，请打开邮箱查收', '通知', {
+									type: 'success',
+									confirmButtonText: '确定',
+								})
 								my_form_model.register_status = ""
-								router.push({ name: 'login'})
+								 
 							}else{
 								// 注册失败
 								my_form_model.register_status = res.data.msg
@@ -118,16 +127,21 @@
 				})
 			
 			}
-			
+			// 绑定enter事件，也可以激活单击按钮事件
+			function keyDown(e){
+				if(e.keyCode === 13){  // enter 编码 13
+					btn_register(my_form.value)
+				}
+			}
+			window.addEventListener("keydown", keyDown, false)  // 网页全局绑定键盘监听事件
+			// 页面关闭时，移出事件监听
+			onUnmounted(()=>{
+				window.removeEventListener("keydown", keyDown, false)
+			})
 			
 			// 修改网页标题
 			document.title = "用户注册"
-			// 直接进入当前页面，先判断是否已经登陆，否则不允许进入
-			const token = localStorage.getItem('token')
-			if(token){
-				ElMessage({type: 'warning', message: '您已登陆'})
-				router.go(-1)
-			}
+
 			return {my_form, my_form_model, my_form_rules, btn_register}
 		}
 	}

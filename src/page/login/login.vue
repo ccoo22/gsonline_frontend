@@ -19,12 +19,14 @@
 			</el-form-item>
 		</el-form>
 		<el-button class='login-button' type="primary" @click="btn_login(my_form)">登陆</el-button>   
-		<div class='register'><router-link to="/register">注册</router-link>  <div class='error'> {{my_form_model.login_status}}</div> </div> 
+		<div class='register'><router-link to="/register">注册</router-link>  <div class='error'> {{my_form_model.login_status}}</div> </div>
+		<div class='register'><router-link to="/reset_passwd">忘记密码</router-link> </div>
+		<div class='register'><router-link to="/resend_active_token">未收到账号激活码？</router-link> </div>
 	</div>
 </template>
 
 <script>
-	import {ref, reactive, getCurrentInstance} from 'vue'
+import {ref, onUnmounted, reactive, getCurrentInstance} from 'vue'
 	import {
 		useRouter, useRoute
 	} from 'vue-router'
@@ -90,6 +92,39 @@
 				})
 			
 			}
+			
+			// 带有激活信息，则先发送账号激活
+			async function active_account(active_token){
+				const res = await proxy.$my_request.post('/user/active_account/', {active_token: active_token}, {headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
+				if(res.status === 200){
+					if(res.data.status === 0){
+						// 激活成功
+						ElMessage({type: 'success', message: '账户激活成功，请登陆'})
+					}else{
+						// 激活失败
+						ElMessageBox.alert('账户激活失败：'+ res.data.msg, '警告', {
+							type: 'error',
+							confirmButtonText: '确定',
+						})
+					}
+				}
+			}
+			if('active_token' in route.query){
+				active_account(route.query.active_token)
+			}
+			
+			// 绑定enter事件，也可以激活单击按钮事件
+			function keyDown(e){
+				if(e.keyCode === 13){  // enter 编码 13
+					btn_login(my_form.value)
+				}
+			}
+			window.addEventListener("keydown", keyDown, false)  // 网页全局绑定键盘监听事件
+			// 页面关闭时，移出事件监听
+			onUnmounted(()=>{
+				window.removeEventListener("keydown", keyDown, false)
+			})
+			
 			// 修改网页标题
 			document.title = "用户登陆"
 			
@@ -113,7 +148,7 @@
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 		background-color: rgba(75, 185, 206, 0.3);
 		width:300px;
-		height: 200px;
+		height: 240px;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;

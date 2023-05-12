@@ -353,7 +353,7 @@
 							<router-link v-for="tag in software_details.tag" :to="'/tools/' + tag"> <el-tag  round >{{tag}}</el-tag> </router-link>
 						</el-descriptions-item>
 						<el-descriptions-item label="发布日期" :width='150000'>{{software_details.date_created}}</el-descriptions-item>
-						<el-descriptions-item label="最近更新" :width='150000'>{{software_details.date_last_modified}}</el-descriptions-item>
+						<el-descriptions-item label="最近更新" :width='150000'>{{software_details.date_update}}</el-descriptions-item>
 						<el-descriptions-item label="引用" :width='150000'>{{software_details.citation}}</el-descriptions-item>
 					</el-descriptions>
 				</el-tab-pane>
@@ -456,6 +456,29 @@
 					// 取消
 					})
 				}else{
+					// 价格警告
+					if(software_details.price > 0){
+						const is_continue = true  // 是否继续执行？
+						const message = '将消耗 ' + software_details.price + " 金币（暂未开放金币充值，请联系本公司销售）"
+						await ElMessageBox.confirm(
+						    message,
+						    '警告',
+						    {
+						      confirmButtonText: '继续',
+						      cancelButtonText: '取消',
+						      type: 'warning',
+						    }
+						  ).then(() => {
+							  // 继续运行：不需要处理
+						    }).catch(() => {
+								// 选择取消
+						      is_continue = false
+						    })
+						if (is_continue === false){
+							return
+						}
+					}
+					// 开始上传
 					await form1.validate( async (valid, fields) => {
 						if(valid){
 							// 验证合格

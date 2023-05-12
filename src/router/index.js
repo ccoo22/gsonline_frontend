@@ -49,6 +49,16 @@ const routes = [
     name: 'register',
     component: () => import(/* webpackChunkName: "Register" */ '../page/login/register.vue')
   },
+  {
+    path: '/reset_passwd',
+    name: 'reset_passwd',
+    component: () => import(/* webpackChunkName: "ResetPWD" */ '../page/login/reset_passwd.vue')
+  },,
+  {
+    path: '/resend_active_token',
+    name: 'resend_active_token',
+    component: () => import(/* webpackChunkName: "ResendActiveToken" */ '../page/login/resend_active_token.vue')
+  },
 ]
 
 const router = createRouter({
