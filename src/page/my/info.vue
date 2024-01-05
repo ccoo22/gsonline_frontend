@@ -3,7 +3,7 @@
 	    <el-descriptions-item label="用户名" width='20px' min-width='20px'>{{info.username}}</el-descriptions-item>
 	    <el-descriptions-item label="邮箱" width='20px' min-width='20px'>{{info.email}}</el-descriptions-item>
 	    <el-descriptions-item label="金币余额" width='20px' min-width='20px'>{{info.coin}}</el-descriptions-item>
-	    <el-descriptions-item label="上一次登陆" width='20px' min-width='20px'>{{info.last_login}}</el-descriptions-item>
+	    <el-descriptions-item label="上一次登录" width='20px' min-width='20px'>{{info.last_login}}</el-descriptions-item>
 	    <el-descriptions-item label="账号创建日期" width='20px' min-width='20px'>{{info.date_joined}}</el-descriptions-item>
  
 	  </el-descriptions>
@@ -29,9 +29,9 @@
 			const info = reactive({})
 			 
 			async function get_info() {
-				// 先确认是否登陆
+				// 先确认是否登录
 				if(! localStorage.getItem('token')){
-					ElMessageBox.confirm("需要登陆", '警告', {confirmButtonText: '登陆',cancelButtonText: '取消',type: 'warning'}).then(() => {
+					ElMessageBox.confirm("需要登录", '警告', {confirmButtonText: '登录',cancelButtonText: '取消',type: 'warning'}).then(() => {
 						router.push({ name: 'login'})
 					}).catch(()=>{
 					// 取消

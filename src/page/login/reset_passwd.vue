@@ -26,7 +26,7 @@
 		</el-form>
 		
 		<el-button class='reset-passwd-button' type="primary" @click="btn_reset_passwd(my_form)">重置密码</el-button>   
-		<div class='login'><router-link to="/login">登陆</router-link>  <div class='error'> {{my_form_model.reset_passwd_status}}</div> </div> 
+		<div class='login'><router-link to="/login">登录</router-link>  <div class='error'> {{my_form_model.reset_passwd_status}}</div> </div> 
 	</div>
 </template>
 
@@ -115,7 +115,7 @@
 						const res = await proxy.$my_request.post('/user/reset_passwd_verify_code/', {email: my_form_model.email}, {headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
 						if(res.status === 200){
 							if(res.data.status === 0){
-								ElMessageBox.alert('验证码已发送，请登陆邮箱获取', '通知', {
+								ElMessageBox.alert('验证码已发送，请登录邮箱获取', '通知', {
 									type: 'success',
 									confirmButtonText: '确定',
 								})

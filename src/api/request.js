@@ -6,6 +6,7 @@ import {ElMessageBox, ElLoading} from 'element-plus'
 let instance = axios.create({
 	// baseURL: 'http://192.168.0.13:8000',  // 后端地址
 	baseURL: 'http://cloud.geneskybiotech.com:8082',  // 后端地址
+	// baseURL: 'http://cloud.geneskybiotech.com:8084',  // 后端地址2： 测试用
 	responseType: "json",
 	headers:{'Content-Type': 'application/json'}
 })

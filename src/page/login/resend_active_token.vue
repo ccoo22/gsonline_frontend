@@ -16,7 +16,7 @@
 		</el-form>
 		
 		<el-button class='resend-button' type="primary" :disabled="btn_status.disabled" @click="btn_resend(my_form)">{{btn_status.msg}}</el-button>   
-		<div class='login'><router-link to="/login">登陆</router-link>  <div class='error'> {{my_form_model.resend_status}}</div> </div> 
+		<div class='login'><router-link to="/login">登录</router-link>  <div class='error'> {{my_form_model.resend_status}}</div> </div> 
 	</div>
 </template>
 
@@ -122,10 +122,10 @@
 			
 			// 修改网页标题
 			document.title = "重新发送账号激活码"
-			// 直接进入当前页面，先判断是否已经登陆，否则不允许进入
+			// 直接进入当前页面，先判断是否已经登录，否则不允许进入
 			const token = localStorage.getItem('token')
 			if(token){
-				ElMessage({type: 'warning', message: '您已登陆'})
+				ElMessage({type: 'warning', message: '您已登录'})
 				router.go(-1)
 			}
 			return {my_form, my_form_model, my_form_rules, btn_resend, btn_status}

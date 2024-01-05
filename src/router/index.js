@@ -35,6 +35,10 @@ const routes = [
     name: 'MyExpense',
     component: () => import(/* webpackChunkName: "MyExpense" */ '../page/my/expenses.vue')
   },{
+    path: '/my/order_list',
+    name: 'order_list',
+    component: () => import(/* webpackChunkName: "OrderList" */ '../page/my/order_list.vue')
+  },{
     path: '/my/info',
     name: 'MyInfo',
     component: () => import(/* webpackChunkName: "MyInfo" */ '../page/my/info.vue')
@@ -53,11 +57,16 @@ const routes = [
     path: '/reset_passwd',
     name: 'reset_passwd',
     component: () => import(/* webpackChunkName: "ResetPWD" */ '../page/login/reset_passwd.vue')
-  },,
+  },
   {
     path: '/resend_active_token',
     name: 'resend_active_token',
     component: () => import(/* webpackChunkName: "ResendActiveToken" */ '../page/login/resend_active_token.vue')
+  },
+  {
+    path: '/order',
+    name: 'order',
+    component: () => import(/* webpackChunkName: "Order" */ '../page/pay/order.vue')
   },
 ]
 

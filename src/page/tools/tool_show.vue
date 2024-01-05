@@ -354,7 +354,7 @@
 						</el-descriptions-item>
 						<el-descriptions-item label="发布日期" :width='150000'>{{software_details.date_created}}</el-descriptions-item>
 						<el-descriptions-item label="最近更新" :width='150000'>{{software_details.date_update}}</el-descriptions-item>
-						<el-descriptions-item label="引用" :width='150000'>{{software_details.citation}}</el-descriptions-item>
+						<el-descriptions-item label="引用" :width='150000'><div v-html="software_details.citation" ></div> </el-descriptions-item>
 					</el-descriptions>
 				</el-tab-pane>
 			  </el-tabs>
@@ -448,9 +448,9 @@
 			
 			// 开始分析（1）数据检测 （2）打包上传
 			async function btn_start_run(form1){
-				// 先确认是否登陆
+				// 先确认是否登录
 				if(! localStorage.getItem('token')){
-					ElMessageBox.confirm("需要登陆", '警告', {confirmButtonText: '登陆',cancelButtonText: '取消',type: 'warning'}).then(() => {
+					ElMessageBox.confirm("需要登录", '警告', {confirmButtonText: '登录',cancelButtonText: '取消',type: 'warning'}).then(() => {
 						router.push({ name: 'login'})
 					}).catch(()=>{
 					// 取消

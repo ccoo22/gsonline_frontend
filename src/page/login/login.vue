@@ -1,7 +1,7 @@
 <template>
 	
 	<div class="login-window">
-		<div class="title">用户登陆</div>
+		<div class="title">用户登录</div>
 		<el-form
 		    ref="my_form"
 		    :model="my_form_model"
@@ -18,7 +18,7 @@
 				<el-input v-model="my_form_model.password" type="password" placeholder="密码" show-password prefix-icon="Lock" />
 			</el-form-item>
 		</el-form>
-		<el-button class='login-button' type="primary" @click="btn_login(my_form)">登陆</el-button>   
+		<el-button class='login-button' type="primary" @click="btn_login(my_form)">登录</el-button>   
 		<div class='register'><router-link to="/register">注册</router-link>  <div class='error'> {{my_form_model.login_status}}</div> </div>
 		<div class='register'><router-link to="/reset_passwd">忘记密码</router-link> </div>
 		<div class='register'><router-link to="/resend_active_token">未收到账号激活码？</router-link> </div>
@@ -69,22 +69,22 @@ import {ref, onUnmounted, reactive, getCurrentInstance} from 'vue'
 				],
 			})
 			
-			// 登陆
+			// 登录
 			async function btn_login(form1){
 				// 验证表单规则是否合格.valid = true/false 是否有不合格的参数。fields: 哪些参数不合格
 				await form1.validate( async (valid, fields)=>{
-					// 表单填充项没有问题，则发送登陆请求
+					// 表单填充项没有问题，则发送登录请求
 					if(valid){
 						const res = await proxy.$my_request.post('/user/login/', {username: my_form_model.username, password: my_form_model.password}, {headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
 						if(res.status === 200){
-							// 登陆成功，存储token,跳转到首页/刷新
+							// 登录成功，存储token,跳转到首页/刷新
 							if(res.data.status === 0){
 								localStorage.setItem('token', res.data.token)
 								localStorage.setItem('username', my_form_model.username)
 								my_form_model.login_status = ""
 								router.push({ name: 'ToolList', params: { tag: 'all' }})
 							}else{
-								// 登陆失败
+								// 登录失败
 								my_form_model.login_status = "用户名或密码错误!"
 							}
 						}
@@ -99,7 +99,7 @@ import {ref, onUnmounted, reactive, getCurrentInstance} from 'vue'
 				if(res.status === 200){
 					if(res.data.status === 0){
 						// 激活成功
-						ElMessage({type: 'success', message: '账户激活成功，请登陆'})
+						ElMessage({type: 'success', message: '账户激活成功，请登录'})
 					}else{
 						// 激活失败
 						ElMessageBox.alert('账户激活失败：'+ res.data.msg, '警告', {
@@ -126,12 +126,12 @@ import {ref, onUnmounted, reactive, getCurrentInstance} from 'vue'
 			})
 			
 			// 修改网页标题
-			document.title = "用户登陆"
+			document.title = "用户登录"
 			
-			// 直接进入当前页面，先判断是否已经登陆，否则不允许进入
+			// 直接进入当前页面，先判断是否已经登录，否则不允许进入
 			const token = localStorage.getItem('token')
 			if(token){
-				ElMessage({type: 'warning', message: '您已登陆'})
+				ElMessage({type: 'warning', message: '您已登录'})
 				router.go(-1)
 			}
 			

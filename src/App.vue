@@ -11,11 +11,11 @@
 						<router-link to="/register">注册</router-link>
 					</div>
 					<div v-if="is_login == false">
-						<router-link to="/login">登陆</router-link>
+						<router-link to="/login">登录</router-link>
 					</div>
 
 					<div v-if="is_login == true">
-						<div @click="btn_log_out">退出登陆{{"（" + username + "）"}}</div>
+						<div @click="btn_log_out">退出登录{{"（" + username + "）"}}</div>
 					</div>
 				</div>
 			</el-header>
@@ -52,14 +52,16 @@
 							</el-sub-menu>
 						</div>
 						
+
+
+					</el-menu>
+					
 						<div @click="help_and_feedback">
 							<li class='el-menu-item'>
 								<el-icon><QuestionFilled /></el-icon>
 								<span>求助与反馈</span>
 							</li>
 						</div>
-					</el-menu>
-					
 				</el-aside>
 				<!-- 右侧内容展示区 -->
 				<el-main id="my-show-content" :style="defaultHeight">
@@ -92,6 +94,7 @@
 	} from 'vue-router'
 	import {ElMessageBox, ElMessage} from 'element-plus'
 	import HelpDialog from '@/components/HelpDialog.vue'
+	
 	const logo_img = require('@/assets/logo.png')
 	export default {
 		components: {
@@ -167,6 +170,24 @@
 							router:'/tools/dimensional_reduction',
 							icon: 'Tools',
 							is_active: false,
+						},{
+							id: '6-4',
+							title: '肿瘤',
+							router:'/tools/tumor',
+							icon: 'Tools',
+							is_active: false,
+						},{
+							id: '6-5',
+							title: '临床',
+							router:'/tools/clinical',
+							icon: 'Tools',
+							is_active: false,
+						},{
+							id: '6-6',
+							title: '多组学联合分析',
+							router:'/tools/omics',
+							icon: 'Tools',
+							is_active: false,
 						},
 					]
 				},
@@ -187,17 +208,30 @@
 							id: '7-2',
 							title: '消费记录',
 							router:'/my/expenses',
-							icon: 'icon-consume',
+							icon: 'Coin',
 							is_active: false,
+						// },{
+						// 	id: '7-3',
+						// 	title: '充值订单',
+						// 	router:'/my/order_list',
+						// 	icon: 'icon-consume',
+						// 	is_active: false,
 						},{
-							id: '7-3',
+							id: '7-4',
 							title: '个人信息',
 							router:'/my/info',
 							icon: 'icon-info',
 							is_active: false,
 						},
 					]
-				}
+				},
+				// {
+				// 	id: '8',
+				// 	title: '充值&赞助',
+				// 	router: '/order',
+				// 	icon: 'icon-consume',
+				// 	is_active: false
+				// },
 			])
 			
 			// 面包屑导航设计
@@ -207,7 +241,7 @@
 			// menu 默认激活
 			const default_active_menu = ref(left_nav_list[0].router)
 			
-			// 是否登陆
+			// 是否登录
 			const is_login = ref(false)
 			const username = ref('')
 			const token = localStorage.getItem('token')
@@ -216,7 +250,7 @@
 				username.value = localStorage.getItem('username')
 			}
 			
-			// 监视路由变动，及时修正顶部导航（主要应对初次登陆成功时的刷新高亮menu）
+			// 监视路由变动，及时修正顶部导航（主要应对初次登录成功时的刷新高亮menu）
 			watch(() => route.path, (path_new, path_old) => {
 				is_login.value = false
 				username.value = ''
@@ -242,9 +276,9 @@
 			}
 			
 			
-			// 退出登陆
+			// 退出登录
 			function btn_log_out(){
-				ElMessageBox.confirm("确定要退出登陆？", '警告', {confirmButtonText: '确定',cancelButtonText: '取消',type: 'warning'}).then(() => {
+				ElMessageBox.confirm("确定要退出登录？", '警告', {confirmButtonText: '确定',cancelButtonText: '取消',type: 'warning'}).then(() => {
 					// 确定
 					localStorage.removeItem('token')
 					localStorage.removeItem('username')
@@ -268,7 +302,7 @@
 				if(token){
 					help_dialog.value = true
 				}else{
-					ElMessageBox.confirm("需要登陆", '警告', {confirmButtonText: '登陆',cancelButtonText: '取消',type: 'warning'}).then(() => {
+					ElMessageBox.confirm("需要登录", '警告', {confirmButtonText: '登录',cancelButtonText: '取消',type: 'warning'}).then(() => {
 						router.push({ name: 'login'})
 					}).catch(()=>{
 					// 取消

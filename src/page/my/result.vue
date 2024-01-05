@@ -60,9 +60,9 @@
 			
 			// 获取结果
 			async function get_result(){
-				// 先确认是否登陆
+				// 先确认是否登录
 				if(! localStorage.getItem('token')){
-					ElMessageBox.confirm("需要登陆", '警告', {confirmButtonText: '登陆',cancelButtonText: '取消',type: 'warning'}).then(() => {
+					ElMessageBox.confirm("需要登录", '警告', {confirmButtonText: '登录',cancelButtonText: '取消',type: 'warning'}).then(() => {
 						router.push({ name: 'login'})
 					}).catch(()=>{
 					// 取消

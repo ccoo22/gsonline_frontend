@@ -28,7 +28,7 @@
 		</el-form>
 		
 		<el-button class='register-button' type="primary" @click="btn_register(my_form)">注册</el-button>   
-		<div class='login'><router-link to="/login">登陆</router-link>  <div class='error'> {{my_form_model.register_status}}</div> </div> 
+		<div class='login'><router-link to="/login">登录</router-link>  <div class='error'> {{my_form_model.register_status}}</div> </div> 
 		<div class='login'><router-link to="/resend_active_token">未收到账号激活码？</router-link> </div>
 	</div>
 </template>
@@ -57,10 +57,10 @@
 			} = getCurrentInstance()
 			const router = useRouter()
 			const route = useRoute()
-			// 直接进入当前页面，先判断是否已经登陆，否则不允许进入
+			// 直接进入当前页面，先判断是否已经登录，否则不允许进入
 			const token = localStorage.getItem('token')
 			if(token){
-				ElMessage({type: 'warning', message: '您已登陆'})
+				ElMessage({type: 'warning', message: '您已登录'})
 				router.go(-1)
 			}
 			
