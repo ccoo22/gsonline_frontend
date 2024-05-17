@@ -26,7 +26,8 @@
 		</el-form>
 		
 		<el-button class='reset-passwd-button' type="primary" @click="btn_reset_passwd(my_form)">重置密码</el-button>   
-		<div class='login'><router-link to="/login">登录</router-link>  <div class='error'> {{my_form_model.reset_passwd_status}}</div> </div> 
+		<div class='login'><router-link to="/login">登录</router-link>  <div class='error'> {{my_form_model.reset_passwd_status}}</div> </div>
+		<div class='login'><router-link to="/resend_active_token">未收到账号激活码？</router-link> </div>
 	</div>
 </template>
 

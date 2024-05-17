@@ -59,7 +59,7 @@
 						<div @click="help_and_feedback">
 							<li class='el-menu-item'>
 								<el-icon><QuestionFilled /></el-icon>
-								<span>求助与反馈</span>
+								<span > <strong>求助与反馈</strong></span>
 							</li>
 						</div>
 				</el-aside>

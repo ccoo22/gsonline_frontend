@@ -281,7 +281,7 @@
 							
 							<!-- 下载示例 -->
 							<el-button color="#247585" @click="get_example_data(item.name, item.save_name)" v-if="item.type === 'download_demo_file'">
-								示例&nbsp; <icon-download-one size="18" fill="#fff"/>
+								<span v-if="'desc' in item "> {{item.desc}}</span><span v-else>示例</span>&nbsp; <icon-download-one size="18" fill="#fff"/>
 							</el-button>
 				 
 				
@@ -459,9 +459,12 @@
 					// 价格警告
 					if(software_details.price > 0){
 						const is_continue = true  // 是否继续执行？
-						const message = '将消耗 ' + software_details.price + " 金币（暂未开放金币充值，请联系本公司销售）"
 						await ElMessageBox.confirm(
-						    message,
+						     h('p', null, [
+						          h('span', null, '将消耗 ' + software_details.price + " 金币（暂未开放金币充值，请通过左侧列表栏的"),
+						          h('i', { style: 'color: red' }, ' 求助与反馈 '),
+						          h('span', null, "模块发送申请")
+						        ]),
 						    '警告',
 						    {
 						      confirmButtonText: '继续',

@@ -85,7 +85,7 @@ import {ref, onUnmounted, reactive, getCurrentInstance} from 'vue'
 								router.push({ name: 'ToolList', params: { tag: 'all' }})
 							}else{
 								// 登录失败
-								my_form_model.login_status = "用户名或密码错误!"
+								my_form_model.login_status = res.data.msg
 							}
 						}
 					}
